@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">StudyMate</string>
+    <string name="title_activity_main_screen">MainScreenActivity</string>
+    <string name="title_home">Home</string>
+    <string name="title_dashboard">Dashboard</string>
+    <string name="title_notifications">Notifications</string>
+    <string name="selected">Selected</string>
+    <string name="unselected">Unselected</string>
+</resources>

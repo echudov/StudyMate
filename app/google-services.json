@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "668000052682",
+    "firebase_url": "https://studymate-7a1a8.firebaseio.com",
+    "project_id": "studymate-7a1a8",
+    "storage_bucket": "studymate-7a1a8.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:668000052682:android:78b4a1bacaecb58b175b33",
+        "android_client_info": {
+          "package_name": "com.example.studymate"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "668000052682-618ap44vi2j38ht7v0ro0f61lncur5gn.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.studymate",
+            "certificate_hash": "9739299cf6da8e81137644f870fe4947ae9f130e"
+          }
+        },
+        {
+          "client_id": "668000052682-hu24alm1p6qqjl1ck298ktr5gam2fsma.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAsZbpJlC78W0BvifrXAlNLjO3rXnZLkfs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "668000052682-hu24alm1p6qqjl1ck298ktr5gam2fsma.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
