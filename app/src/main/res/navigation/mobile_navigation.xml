@@ -9,7 +9,7 @@
         android:id="@+id/navigation_floor"
         android:name="com.example.studymate.ui.floor.FloorFragment"
         android:label="@string/title_floor"
-        tools:layout="@layout/fragment_settings" />
+        tools:layout="@layout/fragment_floor" />
 
     <fragment
         android:id="@+id/navigation_settings"

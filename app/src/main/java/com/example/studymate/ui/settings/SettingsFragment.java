@@ -15,7 +15,7 @@ import androidx.lifecycle.ViewModelProviders;
 
 import com.example.studymate.R;
 
-public class SettingsFragment extends FragmentActivity {
+public class SettingsFragment extends Fragment {
 
     private SettingsViewModel settingsViewModel;
 

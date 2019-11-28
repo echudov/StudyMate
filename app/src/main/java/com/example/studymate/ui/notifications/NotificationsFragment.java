@@ -15,7 +15,7 @@ import androidx.lifecycle.ViewModelProviders;
 
 import com.example.studymate.R;
 
-public class NotificationsFragment extends FragmentActivity {
+public class NotificationsFragment extends Fragment {
 
     private NotificationsViewModel notificationsViewModel;
 

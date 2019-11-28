@@ -15,7 +15,7 @@ import androidx.lifecycle.ViewModelProviders;
 
 import com.example.studymate.R;
 
-public class MapFragment extends FragmentActivity {
+public class MapFragment extends Fragment {
 
     private MapViewModel mapViewModel;
 
