@@ -2,6 +2,7 @@ package com.example.studymate;
 
 import android.os.Bundle;
 
+import com.google.android.gms.maps.GoogleMap;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import androidx.appcompat.app.AppCompatActivity;
