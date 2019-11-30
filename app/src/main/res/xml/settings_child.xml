@@ -4,9 +4,28 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <SwitchPreferenceCompat
-        android:key="notifications"
-        app:title="Enable message notifications"/>
+    <PreferenceCategory
+        app:key="notifications_category"
+        app:title="Notifications">
+
+        <SwitchPreferenceCompat
+            app:key="push_notifications"
+            app:title="Enable push notifications"/>
+
+    </PreferenceCategory>
+    <PreferenceCategory
+        app:key="privacy_category"
+        app:title="Privacy">
+
+        <SwitchPreferenceCompat
+            app:key="privacy_sharing"
+            app:title="Share my location"/>
+
+        <Preference
+            app:key="logout"
+            app:title="Sign out"
+            app:summary="email"/>
+    </PreferenceCategory>
 
     <Preference
         android:key="feedback"
