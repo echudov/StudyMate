@@ -43,20 +43,18 @@ public class SettingsFragment extends Fragment {
             setPreferencesFromResource(R.xml.settings_child, rootKey);
 
             // For putting the email the user logged in with
-            EditTextPreference signOutEmail = findPreference("logout");
+            Preference signOutEmail = findPreference("logout");
+
             if (signOutEmail != null) {
-                signOutEmail.setSummaryProvider(new Preference.SummaryProvider() {
-                    @Override
-                    public CharSequence provideSummary(Preference preference) {
-                        if (GeneralFunctions.getEmail(getActivity()) == null) {
-                            return "";
-                        }
-                        return GeneralFunctions.getEmail(getActivity());
-                    }
-                });
+                String email = GeneralFunctions.getEmail(getActivity());
+                System.out.println(email);
+                if (email != null) {
+                    signOutEmail.setSummary(email);
+                }
             }
         }
     }
+
 
     /**
      * Jesus christ i wanted to kill myself but it's finally done
@@ -65,7 +63,7 @@ public class SettingsFragment extends Fragment {
      * will most likely keep preference xml static to keep myself from killing myself
      * (deep I know)
      */
-    public void addChildSettings() {
+    private void addChildSettings() {
         getFragmentManager().beginTransaction().replace(R.id.fragment_settings,new
                 ChildSettingsFragment()).commit();
     }
