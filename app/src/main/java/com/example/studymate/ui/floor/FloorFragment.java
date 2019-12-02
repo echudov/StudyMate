@@ -24,11 +24,7 @@ public class FloorFragment extends Fragment {
         floorViewModel =
                 ViewModelProviders.of(this).get(FloorViewModel.class);
         View root = inflater.inflate(R.layout.fragment_floor, container, false);
-        final TextView textView = root.findViewById(R.id.text_floor);
-        floorViewModel.getText().observe(this, new Observer<String>() {
-            @Override
-            public void onChanged(@Nullable String s) { textView.setText(s); }
-        });
+        
         return root;
     }
 }
