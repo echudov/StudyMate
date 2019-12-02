@@ -43,6 +43,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         try {
             MapsInitializer.initialize(getActivity().getApplicationContext());
         } catch (Exception e) {
+            System.out.println("Error with initializing map in current activity");
             e.printStackTrace();
         }
 
