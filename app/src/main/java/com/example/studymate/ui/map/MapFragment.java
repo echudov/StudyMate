@@ -47,7 +47,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
             e.printStackTrace();
         }
 
-        mMapView.getMapAsync(this);
+        mMapView.getMapAsync(this::onMapReady);
         return root;
     }
 
