@@ -1,5 +1,6 @@
 package com.example.studymate.ui.settings;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.preference.PreferenceFragment;
 import android.view.LayoutInflater;
@@ -20,8 +21,13 @@ import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.PreferenceScreen;
 
+import com.example.studymate.LoginActivity;
 import com.example.studymate.R;
 import com.example.studymate.ui.GeneralFunctions;
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 
 public class SettingsFragment extends Fragment {
 
@@ -44,6 +50,20 @@ public class SettingsFragment extends Fragment {
 
             // For putting the email the user logged in with
             Preference signOutEmail = findPreference("logout");
+            Intent signOutSendToLogin = new Intent(getActivity(), LoginActivity.class);
+
+            // Make a click on sign out launch LoginActivity
+            signOutEmail.setIntent(signOutSendToLogin);
+
+            // Make a click actually SIGN OUT the user
+            signOutEmail.getOnPreferenceClickListener() {
+                GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                        .requestEmail()
+                        .build();
+                GoogleSignInClient currentSignIn = GoogleSignIn.getClient(getActivity(), gso);
+
+                currentSignIn.signOut();
+            }
 
             if (signOutEmail != null) {
                 String email = GeneralFunctions.getEmail(getActivity());
