@@ -55,6 +55,7 @@ public class LoginActivity extends AppCompatActivity {
             SignInButton signInButton = findViewById(R.id.sign_in_button);
             signInButton.setVisibility(View.GONE);
             // Since the user is authenticated, finish this activity and transition to the Main Selection Screen
+            System.out.println("Switching activity");
             Intent intent = new Intent(this, MainScreenActivity.class);
             startActivity(intent);
             // finish();

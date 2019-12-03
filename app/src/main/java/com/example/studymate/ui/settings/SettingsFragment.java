@@ -64,7 +64,12 @@ public class SettingsFragment extends Fragment {
      * (deep I know)
      */
     private void addChildSettings() {
-        getFragmentManager().beginTransaction().replace(R.id.fragment_settings,new
-                ChildSettingsFragment()).commit();
+        try {
+            getFragmentManager().beginTransaction().replace(R.id.fragment_settings,new
+                    ChildSettingsFragment()).commit();
+        } catch (Exception e) {
+            System.out.println("An error occured.");
+            e.printStackTrace();
+        }
     }
 }
