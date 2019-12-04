@@ -2,30 +2,20 @@ package com.example.studymate.ui.settings;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.preference.PreferenceFragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
-import androidx.annotation.Nullable;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentActivity;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
-import androidx.preference.EditTextPreference;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
-import androidx.preference.PreferenceScreen;
 
 import com.example.studymate.LoginActivity;
 import com.example.studymate.R;
 import com.example.studymate.ui.GeneralFunctions;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 
@@ -54,14 +44,15 @@ public class SettingsFragment extends Fragment {
 
             // Make a click on sign out launch LoginActivity
             signOutEmail.setIntent(signOutSendToLogin);
-
             // Make a click actually SIGN OUT the user
-            signOutEmail.getOnPreferenceClickListener() {
+            Preference.OnPreferenceClickListener signedOut = signOutEmail.getOnPreferenceClickListener();
+            if (signedOut != null) {
+                // Button was clicked; sign out
                 GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                         .requestEmail()
                         .build();
                 GoogleSignInClient currentSignIn = GoogleSignIn.getClient(getActivity(), gso);
-
+                // Signs out current client
                 currentSignIn.signOut();
             }
 
