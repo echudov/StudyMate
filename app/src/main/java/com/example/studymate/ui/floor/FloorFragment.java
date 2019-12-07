@@ -1,16 +1,15 @@
 package com.example.studymate.ui.floor;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.media.MediaMetadataRetriever;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentActivity;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
 import com.example.studymate.R;
@@ -28,6 +27,9 @@ import com.google.android.gms.maps.model.TileOverlayOptions;
 import com.google.android.gms.maps.model.TileProvider;
 import com.google.android.gms.maps.model.UrlTileProvider;
 
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.net.MalformedURLException;
 import java.net.URL;
 
@@ -98,35 +100,24 @@ public class FloorFragment extends Fragment implements OnMapReadyCallback {
         mMap.moveCamera(CameraUpdateFactory.newLatLng(grainger));
         mMap.animateCamera(CameraUpdateFactory.zoomTo(20.0f));
 
+        int level = mMap.getFocusedBuilding().getActiveLevelIndex();
+
+
+
         // Logic for adding tile overlay
-        TileProvider tileProvider = new TileProvider(256, 256) {
+        TileProvider tileProvider = new TileProvider() {
             public Tile getTile(int x, int y, int zoom) {
-                String fileLocation = String.format("asdasd/%d/");
                 if (!checkTileExists(x, y, zoom)) {
                     return null;
                 }
-                try {
-                    // logic for pulling out a tile
-                } catch ( e)
+                String fileLocation;
+                // this is not correct, figure out which file to pull from.
+                fileLocation = "res/drawable/libraries" + "/grainger" + "/floor" + level + "/" + zoom; // need to add x and y
+
+                Bitmap bitmap = BitmapFactory.decodeFile(fileLocation);
+                byte[] data = getBytesFromBitmap(bitmap);
+                return new Tile(256, 256, data);
             }
-            @Override
-            public URL getTileUrl(int x, int y, int zoom) {
-
-                /* Define the URL pattern for the tile images */
-                String s = String.format("http://my.image.server/images/%d/%d/%d.png",
-                        zoom, x, y);
-
-                if (!checkTileExists(x, y, zoom)) {
-                    return null;
-                }
-
-                try {
-                    return new URL(s);
-                } catch (MalformedURLException e) {
-                    throw new AssertionError(e);
-                }
-            }
-
             /*
              * Check that the tile server supports the requested x, y and zoom.
              * Complete this stub according to the tile range you support.
@@ -134,14 +125,20 @@ public class FloorFragment extends Fragment implements OnMapReadyCallback {
              * need to define the supported x, y range at each zoom level.
              */
             private boolean checkTileExists(int x, int y, int zoom) {
-                int minZoom = 12;
-                int maxZoom = 16;
+                int minZoom = 0;
+                int maxZoom = 4;
 
                 if ((zoom < minZoom || zoom > maxZoom)) {
                     return false;
                 }
 
                 return true;
+            }
+
+            public byte[] getBytesFromBitmap(Bitmap bitmap) {
+                ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                bitmap.compress(Bitmap.CompressFormat.JPEG, 70, stream);
+                return stream.toByteArray();
             }
         };
 
