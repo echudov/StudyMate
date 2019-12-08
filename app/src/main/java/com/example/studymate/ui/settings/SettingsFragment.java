@@ -1,6 +1,7 @@
 package com.example.studymate.ui.settings;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -34,6 +35,7 @@ public class SettingsFragment extends Fragment {
 
     // messing around with fragments for preferences n stuff
     public static class ChildSettingsFragment extends PreferenceFragmentCompat {
+
         @Override
         public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
             setPreferencesFromResource(R.xml.settings_child, rootKey);

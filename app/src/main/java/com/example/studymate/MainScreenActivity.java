@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.os.Looper;
 import android.util.Log;
 
+import com.example.studymate.ui.settings.SettingsFragment;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
@@ -23,6 +24,8 @@ import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
+import androidx.preference.Preference;
+import androidx.preference.PreferenceFragmentCompat;
 
 public class MainScreenActivity extends AppCompatActivity {
 
@@ -33,8 +36,6 @@ public class MainScreenActivity extends AppCompatActivity {
     private LocationCallback locationCallback;
     private LocationRequest locationRequest;
 
-
-    private boolean hasLocationPermission;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -55,9 +56,6 @@ public class MainScreenActivity extends AppCompatActivity {
         // IMPLEMENT PRERERENCE TO KEEP IT EITHER HIDDEN FROM OTHERS /
         // NOT USED
 
-
-        // hasLocationPermission change based on settings preferences, no idea how to do that rn
-        // madhav if you could help that would be brain boosting
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
         fusedLocationClient.getLastLocation()
                 .addOnSuccessListener(this, new OnSuccessListener<Location>() {
@@ -87,10 +85,7 @@ public class MainScreenActivity extends AppCompatActivity {
 
     protected void onResume() {
         super.onResume();
-
-        if (hasLocationPermission) {
-            startLocationUpdates();
-        }
+        startLocationUpdates();
     }
     private void startLocationUpdates() {
         fusedLocationClient.requestLocationUpdates(locationRequest,
