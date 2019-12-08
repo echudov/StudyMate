@@ -85,13 +85,6 @@ public class MainScreenActivity extends AppCompatActivity {
         locationRequest.setInterval(5);
     }
 
-    protected void onResume() {
-        super.onResume();
-
-        if (hasLocationPermission) {
-            startLocationUpdates();
-        }
-    }
     private void startLocationUpdates() {
         fusedLocationClient.requestLocationUpdates(locationRequest,
                 locationCallback,

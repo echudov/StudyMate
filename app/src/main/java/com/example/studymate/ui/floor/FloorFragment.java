@@ -114,6 +114,8 @@ public class FloorFragment extends Fragment implements OnMapReadyCallback {
                 // this is not correct, figure out which file to pull from.
                 fileLocation = "res/drawable/libraries" + "/grainger" + "/floor" + level + "/" + zoom; // need to add x and y
 
+
+
                 Bitmap bitmap = BitmapFactory.decodeFile(fileLocation);
                 byte[] data = getBytesFromBitmap(bitmap);
                 return new Tile(256, 256, data);
