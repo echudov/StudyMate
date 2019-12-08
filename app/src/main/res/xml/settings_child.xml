@@ -17,10 +17,6 @@
         app:key="privacy_category"
         app:title="Privacy">
 
-        <SwitchPreferenceCompat
-            app:key="privacy_sharing"
-            app:title="Share my location"/>
-
         <Preference
             app:key="logout"
             app:title="Sign out"
