@@ -94,13 +94,13 @@ public class FloorFragment extends Fragment implements OnMapReadyCallback {
         LatLng grainger = new LatLng(40.112485, -88.226841);
         mMap.addMarker(new MarkerOptions().position(grainger).title("Marker at Grainger"));
 
-        mMap.setMinZoomPreference(17.0f);
-        mMap.setMaxZoomPreference(27.0f);
+        mMap.setMinZoomPreference(0.0f);
+        mMap.setMaxZoomPreference(3.0f);
 
         mMap.moveCamera(CameraUpdateFactory.newLatLng(grainger));
-        mMap.animateCamera(CameraUpdateFactory.zoomTo(20.0f));
+        mMap.animateCamera(CameraUpdateFactory.zoomTo(0f));
 
-        int level = mMap.getFocusedBuilding().getActiveLevelIndex();
+        //int level = mMap.getFocusedBuilding().getActiveLevelIndex();
 
 
 
@@ -112,10 +112,10 @@ public class FloorFragment extends Fragment implements OnMapReadyCallback {
                 }
                 String fileLocation;
                 // this is not correct, figure out which file to pull from.
-                fileLocation = "res/drawable/libraries" + "/grainger" + "/floor" + level + "/" + zoom; // need to add x and y
+                fileLocation = "/res/drawable/libraries" + "/grainger" + "/floor" + 1 + "/" + zoom + "/" + x + "/" + y + ".png"; //need to add x and y
 
 
-
+                System.out.println(x + " " + y);
                 Bitmap bitmap = BitmapFactory.decodeFile(fileLocation);
                 byte[] data = getBytesFromBitmap(bitmap);
                 return new Tile(256, 256, data);
@@ -128,7 +128,8 @@ public class FloorFragment extends Fragment implements OnMapReadyCallback {
              */
             private boolean checkTileExists(int x, int y, int zoom) {
                 int minZoom = 0;
-                int maxZoom = 4;
+                int maxZoom = 3;
+
 
                 if ((zoom < minZoom || zoom > maxZoom)) {
                     return false;
@@ -139,7 +140,7 @@ public class FloorFragment extends Fragment implements OnMapReadyCallback {
 
             public byte[] getBytesFromBitmap(Bitmap bitmap) {
                 ByteArrayOutputStream stream = new ByteArrayOutputStream();
-                bitmap.compress(Bitmap.CompressFormat.JPEG, 70, stream);
+                bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
                 return stream.toByteArray();
             }
         };
