@@ -15,6 +15,7 @@ import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
@@ -32,9 +33,11 @@ public class MainScreenActivity extends AppCompatActivity {
     private FusedLocationProviderClient fusedLocationClient;
     private LocationCallback locationCallback;
     private LocationRequest locationRequest;
+    private LatLng mostRecentLocation;
 
 
     private boolean hasLocationPermission;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -77,6 +80,7 @@ public class MainScreenActivity extends AppCompatActivity {
                 for (Location location : locationResult.getLocations()) {
                     // Update UI with location data
                     // ...
+                    mostRecentLocation = new LatLng (location.getLatitude(), location.getLongitude());
                 }
             };
         };
@@ -85,13 +89,6 @@ public class MainScreenActivity extends AppCompatActivity {
         locationRequest.setInterval(5);
     }
 
-    protected void onResume() {
-        super.onResume();
-
-        if (hasLocationPermission) {
-            startLocationUpdates();
-        }
-    }
     private void startLocationUpdates() {
         fusedLocationClient.requestLocationUpdates(locationRequest,
                 locationCallback,
