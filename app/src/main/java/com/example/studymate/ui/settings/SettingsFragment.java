@@ -14,7 +14,7 @@ import androidx.preference.PreferenceFragmentCompat;
 
 import com.example.studymate.LoginActivity;
 import com.example.studymate.R;
-import com.example.studymate.ui.GeneralFunctions;
+import com.example.studymate.GeneralFunctions;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;

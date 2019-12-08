@@ -1,4 +1,4 @@
-package com.example.studymate.ui;
+package com.example.studymate;
 
 import android.app.Activity;
 
