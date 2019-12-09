@@ -18,6 +18,7 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.firebase.database.FirebaseDatabase;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.navigation.NavController;
@@ -54,13 +55,9 @@ public class MainScreenActivity extends AppCompatActivity {
         // NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(navView, navController);
 
-        // LOCATION DATA FOR USER
-        // IMPLEMENT PRERERENCE TO KEEP IT EITHER HIDDEN FROM OTHERS /
-        // NOT USED
+        // Enabling Disk Persistance for Firebase to work when offline as well
+        FirebaseDatabase.getInstance().setPersistenceEnabled(true);
 
-
-        // hasLocationPermission change based on settings preferences, no idea how to do that rn
-        // madhav if you could help that would be brain boosting
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
         fusedLocationClient.getLastLocation()
                 .addOnSuccessListener(this, new OnSuccessListener<Location>() {
