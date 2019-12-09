@@ -8,4 +8,9 @@
     <string name="selected">Selected</string>
     <string name="unselected">Unselected</string>
     <string name="title_activity_maps">Map</string>
+    <string-array name="libraries">
+        <item>grainger</item>
+        <item>ugl</item>
+        <item>main_library</item>
+    </string-array>
 </resources>

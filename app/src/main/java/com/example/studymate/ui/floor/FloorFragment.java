@@ -89,16 +89,15 @@ public class FloorFragment extends Fragment implements OnMapReadyCallback {
         // pull UiSettings object to hardcode some necessary settings/precautions
         // so users don't use too many features and break the app
         mUiSettings = mMap.getUiSettings();
-        mUiSettings.setMapToolbarEnabled(false);
+        mUiSettings.setMapToolbarEnabled(true);
         mUiSettings.setTiltGesturesEnabled(false);
         mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
-        mMap.setIndoorEnabled(true);
         // Add a marker at Grainger
         LatLng grainger = new LatLng(40.112485, -88.226841);
         mMap.addMarker(new MarkerOptions().position(grainger).title("Marker at Grainger"));
 
         mMap.setMinZoomPreference(0.0f);
-        mMap.setMaxZoomPreference(5.0f);
+        mMap.setMaxZoomPreference(3.0f);
 
         mMap.moveCamera(CameraUpdateFactory.newLatLng(grainger));
         mMap.animateCamera(CameraUpdateFactory.zoomTo(0f));
@@ -122,7 +121,6 @@ public class FloorFragment extends Fragment implements OnMapReadyCallback {
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-                System.out.println(x + " " + y);
                 Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
                 byte[] data = getBytesFromBitmap(bitmap);
                 return new Tile(256, 256, data);
