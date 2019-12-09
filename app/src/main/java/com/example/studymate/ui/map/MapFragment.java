@@ -16,7 +16,11 @@ import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class MapFragment extends Fragment implements OnMapReadyCallback {
 
@@ -57,11 +61,28 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-        mMap.setIndoorEnabled(false);
+        mMap.setIndoorEnabled(true);
 
         // Add a marker in Sydney and move the camera
-        LatLng sydney = new LatLng(-34, 151);
-        mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+        LatLng grainger = new LatLng(40.112485, -88.226841);
+        LatLng ugl = new LatLng();
+
+        Marker marker_at_grainger = mMap.addMarker(new MarkerOptions().position(grainger).title("Grainger Library"));
+        Marker marker_at_ugl = mMap.addMarker(new MarkerOptions().position(ugl).title("Undergraduate Library"));
+        mMap.setOnInfoWindowClickListener(marker -> {
+            if (marker.equals(marker_at_grainger)) {
+                selectLibrary("grainger", "1");
+            } else if (marker.equals(marker_at_ugl)) {
+                selectLibrary("ugl", "B1");
+            }
+        });
+        mMap.moveCamera(CameraUpdateFactory.newLatLng(grainger));
+        mMap.animateCamera(CameraUpdateFactory.zoomTo(18.0f));
+    }
+    public void selectLibrary(String library, String floor) {
+        // switch views to floorFragment
+        // add extra to intent or smth to keep info about library so that the activity knows what to do
+        // once switched initialize floor view of the specific library
+
     }
 }

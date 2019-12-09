@@ -27,9 +27,12 @@ import com.google.android.gms.maps.model.TileOverlayOptions;
 import com.google.android.gms.maps.model.TileProvider;
 import com.google.android.gms.maps.model.UrlTileProvider;
 
+import java.io.BufferedInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 
@@ -86,10 +89,9 @@ public class FloorFragment extends Fragment implements OnMapReadyCallback {
         // pull UiSettings object to hardcode some necessary settings/precautions
         // so users don't use too many features and break the app
         mUiSettings = mMap.getUiSettings();
-        mUiSettings.setMapToolbarEnabled(false);
+        mUiSettings.setMapToolbarEnabled(true);
         mUiSettings.setTiltGesturesEnabled(false);
         mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
-        mMap.setIndoorEnabled(true);
         // Add a marker at Grainger
         LatLng grainger = new LatLng(40.112485, -88.226841);
         mMap.addMarker(new MarkerOptions().position(grainger).title("Marker at Grainger"));
@@ -112,11 +114,14 @@ public class FloorFragment extends Fragment implements OnMapReadyCallback {
                 }
                 String fileLocation;
                 // this is not correct, figure out which file to pull from.
-                fileLocation = "file:///android_asset/libraries" + "/grainger" + "/floor" + 1 + "/" + zoom + "/" + x + "/" + y + ".png"; //need to add x and y
-
-                File imageFile = new File(fileLocation);
-                System.out.println(x + " " + y);
-                Bitmap bitmap = BitmapFactory.decodeFile(imageFile.getAbsolutePath());
+                fileLocation = "libraries" + "/grainger" + "/floor" + 1 + "/" + zoom + "/" + x + "/" + y + ".png"; //need to add x and y
+                InputStream inputStream = null;
+                try {
+                    inputStream = getContext().getAssets().open(fileLocation);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
                 byte[] data = getBytesFromBitmap(bitmap);
                 return new Tile(256, 256, data);
             }
