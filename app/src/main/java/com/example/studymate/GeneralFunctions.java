@@ -57,18 +57,19 @@ public class GeneralFunctions {
         }
         profilePic = BitmapFactory.decodeStream(inputStream);
         return profilePic;
-
+/*
         abstract class DownloadImageTask extends AsyncTask {
             protected Bitmap doInBackground(String url) {
                 InputStream inputStream = new URL(url).openStream();
                 Bitmap pic = BitmapFactory.decodeStream(inputStream);
-                return pic
+                return pic;
             }
 
             protected void onPostExecute(Bitmap result) {
-                ;
             }
         }
+
+ */
     }
 
     /**
