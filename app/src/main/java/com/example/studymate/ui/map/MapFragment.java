@@ -7,9 +7,14 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProviders;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
 
+import com.example.studymate.MainScreenActivity;
 import com.example.studymate.R;
+import com.example.studymate.ui.floor.FloorFragment;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
@@ -65,13 +70,13 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
 
         // Add a marker in Sydney and move the camera
         LatLng grainger = new LatLng(40.112485, -88.226841);
-        LatLng ugl = new LatLng();
+        LatLng ugl = new LatLng(40.1047226,-88.2272146);
 
         Marker marker_at_grainger = mMap.addMarker(new MarkerOptions().position(grainger).title("Grainger Library"));
         Marker marker_at_ugl = mMap.addMarker(new MarkerOptions().position(ugl).title("Undergraduate Library"));
         mMap.setOnInfoWindowClickListener(marker -> {
             if (marker.equals(marker_at_grainger)) {
-                selectLibrary("grainger", "1");
+                selectLibrary("grainger", "2");
             } else if (marker.equals(marker_at_ugl)) {
                 selectLibrary("ugl", "B1");
             }
@@ -80,9 +85,10 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         mMap.animateCamera(CameraUpdateFactory.zoomTo(18.0f));
     }
     public void selectLibrary(String library, String floor) {
-        // switch views to floorFragment
-        // add extra to intent or smth to keep info about library so that the activity knows what to do
-        // once switched initialize floor view of the specific library
-
+        getActivity().getSupportFragmentManager().
+                beginTransaction().
+                replace(R.id.nav_host_fragment, new FloorFragment()).
+                addToBackStack(null).
+                commit();
     }
 }

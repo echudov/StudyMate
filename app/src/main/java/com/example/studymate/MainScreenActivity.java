@@ -20,6 +20,8 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
@@ -58,7 +60,6 @@ public class MainScreenActivity extends AppCompatActivity {
         // IMPLEMENT PRERERENCE TO KEEP IT EITHER HIDDEN FROM OTHERS /
         // NOT USED
 
-
         // hasLocationPermission change based on settings preferences, no idea how to do that rn
         // madhav if you could help that would be brain boosting
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
@@ -93,6 +94,13 @@ public class MainScreenActivity extends AppCompatActivity {
         fusedLocationClient.requestLocationUpdates(locationRequest,
                 locationCallback,
                 Looper.getMainLooper());
+    }
+    public void loadFragment(Fragment fragment) {
+        // load fragment
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        transaction.replace(R.id.nav_view, fragment);
+        transaction.addToBackStack(null);
+        transaction.commit();
     }
 
 }

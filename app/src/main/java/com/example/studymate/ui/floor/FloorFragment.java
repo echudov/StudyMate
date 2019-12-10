@@ -12,6 +12,7 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
 
+import com.example.studymate.GeneralFunctions;
 import com.example.studymate.R;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -19,7 +20,10 @@ import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.UiSettings;
+import com.google.android.gms.maps.model.BitmapDescriptor;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Tile;
 import com.google.android.gms.maps.model.TileOverlay;
@@ -91,19 +95,29 @@ public class FloorFragment extends Fragment implements OnMapReadyCallback {
         mUiSettings = mMap.getUiSettings();
         mUiSettings.setMapToolbarEnabled(true);
         mUiSettings.setTiltGesturesEnabled(false);
-        mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
+        mMap.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
         // Add a marker at Grainger
         LatLng grainger = new LatLng(40.112485, -88.226841);
         mMap.addMarker(new MarkerOptions().position(grainger).title("Marker at Grainger"));
 
-        mMap.setMinZoomPreference(0.0f);
-        mMap.setMaxZoomPreference(3.0f);
+        mMap.setMinZoomPreference(3.5f);
+        mMap.setMaxZoomPreference(4.0f);
+        LatLngBounds grainger2 = new LatLngBounds(new LatLng(90-9, -180 + 18), new LatLng(90, 0));
+        mMap.moveCamera(CameraUpdateFactory.newLatLng(grainger2.getCenter()));
+        mMap.animateCamera(CameraUpdateFactory.zoomTo(3.5f));
+        mMap.setLatLngBoundsForCameraTarget(grainger2);
 
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(grainger));
-        mMap.animateCamera(CameraUpdateFactory.zoomTo(0f));
-
-        //int level = mMap.getFocusedBuilding().getActiveLevelIndex();
-
+        mMap.setOnMapLongClickListener(new GoogleMap.OnMapLongClickListener() {
+            @Override
+            public void onMapLongClick(LatLng latLng) {
+                BitmapDescriptor icon = BitmapDescriptorFactory
+                        .fromBitmap(GeneralFunctions.getProfilePic(getActivity()));
+                googleMap.addMarker(new MarkerOptions()
+                        .position(latLng)
+                        .title("Your marker title")
+                        .snippet("Your marker snippet").icon(icon));
+            }
+        });
 
 
         // Logic for adding tile overlay
@@ -114,7 +128,7 @@ public class FloorFragment extends Fragment implements OnMapReadyCallback {
                 }
                 String fileLocation;
                 // this is not correct, figure out which file to pull from.
-                fileLocation = "libraries" + "/grainger" + "/floor" + 1 + "/" + zoom + "/" + x + "/" + y + ".png"; //need to add x and y
+                fileLocation = "libraries" + "/grainger" + "/floor" + 2 + "/" + zoom + "/" + x + "/" + y + ".png"; //need to add x and y
                 InputStream inputStream = null;
                 try {
                     inputStream = getContext().getAssets().open(fileLocation);
@@ -133,8 +147,7 @@ public class FloorFragment extends Fragment implements OnMapReadyCallback {
              */
             private boolean checkTileExists(int x, int y, int zoom) {
                 int minZoom = 0;
-                int maxZoom = 3;
-
+                int maxZoom = 4;
 
                 if ((zoom < minZoom || zoom > maxZoom)) {
                     return false;
@@ -153,4 +166,5 @@ public class FloorFragment extends Fragment implements OnMapReadyCallback {
         TileOverlay tileOverlay = mMap.addTileOverlay(new TileOverlayOptions()
                 .tileProvider(tileProvider));
     }
+
 }
