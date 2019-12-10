@@ -15,9 +15,15 @@ import androidx.preference.PreferenceFragmentCompat;
 import com.example.studymate.LoginActivity;
 import com.example.studymate.R;
 import com.example.studymate.GeneralFunctions;
+import com.firebase.ui.auth.AuthUI;
+import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
 
 public class SettingsFragment extends Fragment {
 
@@ -48,13 +54,21 @@ public class SettingsFragment extends Fragment {
             // Make a click actually SIGN OUT the user
             Preference.OnPreferenceClickListener signedOut = signOutEmail.getOnPreferenceClickListener();
             if (signedOut != null) {
-                // Button was clicked; sign out
+                FirebaseAuth.getInstance().signOut();
+
+                // Google sign out
                 GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                        .requestIdToken(getString(R.string.default_web_client_id))
                         .requestEmail()
                         .build();
-                GoogleSignInClient currentSignIn = GoogleSignIn.getClient(getActivity(), gso);
-                // Signs out current client
-                currentSignIn.signOut();
+                GoogleSignIn.getClient(getContext(), gso).signOut()
+                        .addOnCompleteListener(getActivity(), new OnCompleteListener<Void>() {
+                            @Override
+                            public void onComplete(@NonNull Task<Void> task) {
+                                Intent intent = new Intent(getContext(), LoginActivity.class);
+                                startActivity(intent);
+                            }
+                        });
             }
 
             if (signOutEmail != null) {

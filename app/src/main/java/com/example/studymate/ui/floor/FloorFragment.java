@@ -1,13 +1,19 @@
 package com.example.studymate.ui.floor;
 
+import android.app.Dialog;
+import android.content.DialogInterface;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
+import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
 
@@ -45,6 +51,7 @@ public class FloorFragment extends Fragment implements OnMapReadyCallback {
     private GoogleMap mMap;
     private UiSettings mUiSettings;
 
+    private String studying;
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         mapSynced = false;
@@ -104,7 +111,32 @@ public class FloorFragment extends Fragment implements OnMapReadyCallback {
         mMap.setOnMapLongClickListener(new GoogleMap.OnMapLongClickListener() {
             @Override
             public void onMapLongClick(LatLng latLng) {
-                addUserMarker(GeneralFunctions.getProfilePic(getActivity()), latLng, googleMap);
+                AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                builder.setTitle("Subject");
+
+                // Set up the input
+                final EditText input = new EditText(getContext());
+                // Specify the type of input expected; this, for example, sets the input as a password, and will mask the text
+                input.setInputType(InputType.TYPE_CLASS_TEXT);
+                builder.setView(input);
+
+                // Set up the buttons
+                builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        studying = input.getText().toString();
+                        addUserMarker(studying, latLng, googleMap);
+                    }
+                });
+                builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+                    }
+                });
+
+                builder.show();
+
                 // Send information about new marker to FireBase Database
 
                 /*
@@ -170,14 +202,11 @@ public class FloorFragment extends Fragment implements OnMapReadyCallback {
                 .tileProvider(tileProvider));
     }
 
-    private void addUserMarker(Bitmap picture, LatLng location, GoogleMap googleMap) {
-        BitmapDescriptor icon = BitmapDescriptorFactory
-                .fromBitmap(picture);
-
+    private void addUserMarker(String contentStudying, LatLng location, GoogleMap googleMap) {
         googleMap.addMarker(new MarkerOptions()
                 .position(location)
-                .title("Your marker title")
-                .snippet("Your marker snippet").icon(icon));
+                .title(GeneralFunctions.getEmail(getActivity()))
+                .snippet(contentStudying));
     }
 
 }

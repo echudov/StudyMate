@@ -17,9 +17,11 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.gson.JsonObject;
+import com.squareup.picasso.Picasso;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URL;
@@ -40,36 +42,26 @@ public class GeneralFunctions {
 
     public static Bitmap getProfilePic(Activity context) {
         FirebaseUser acct = FirebaseAuth.getInstance().getCurrentUser();
-        Bitmap profilePic = null;
         Uri uri = acct.getPhotoUrl();
-        URL url = null;
+
+
+        return getBitmapFromURL(uri.toString());
+    }
+
+    protected static Bitmap getBitmapFromURL(String str) {
         try {
-            url = new URL(uri.toString());
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        }
-        System.out.println(url);
-        InputStream inputStream = null;
-        try {
-            inputStream = url.openStream();
+            java.net.URL url = new java.net.URL(str);
+            HttpURLConnection connection = (HttpURLConnection) url
+                    .openConnection();
+            connection.setDoInput(true);
+            connection.connect();
+            InputStream input = connection.getInputStream();
+            Bitmap myBitmap = BitmapFactory.decodeStream(input);
+            return myBitmap;
         } catch (IOException e) {
             e.printStackTrace();
+            return null;
         }
-        profilePic = BitmapFactory.decodeStream(inputStream);
-        return profilePic;
-/*
-        abstract class DownloadImageTask extends AsyncTask {
-            protected Bitmap doInBackground(String url) {
-                InputStream inputStream = new URL(url).openStream();
-                Bitmap pic = BitmapFactory.decodeStream(inputStream);
-                return pic;
-            }
-
-            protected void onPostExecute(Bitmap result) {
-            }
-        }
-
- */
     }
 
     /**
