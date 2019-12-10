@@ -13,6 +13,8 @@ import android.util.Log;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.io.InputStream;
 
@@ -60,5 +62,26 @@ public class GeneralFunctions {
         canvas.drawBitmap(bitmap, rect, rect, paint);
 
         return output;
+    }
+
+    /**
+     * Saves any data type to a specified location in the current database.
+     * @param reference The name of the location in the database
+     * @param value The data to save
+     */
+    public static void writeToDatabase(String reference, Object value) {
+        FirebaseDatabase currentDatabase = FirebaseDatabase.getInstance();
+        DatabaseReference referenceToWrite = currentDatabase.getReference(reference);
+        referenceToWrite.setValue(value);
+    }
+
+    /**
+     * Deletes all the data at the specified location in the database
+     * @param reference The name of the location in the database
+     */
+    public static void deleteDatafromDatabase(String reference) {
+        FirebaseDatabase currentDatabase = FirebaseDatabase.getInstance();
+        DatabaseReference referenceToClear = currentDatabase.getReference(reference);
+        referenceToClear.removeValue();
     }
 }
