@@ -2,7 +2,6 @@ package com.example.studymate.ui.floor;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.media.MediaMetadataRetriever;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -29,18 +28,12 @@ import com.google.android.gms.maps.model.Tile;
 import com.google.android.gms.maps.model.TileOverlay;
 import com.google.android.gms.maps.model.TileOverlayOptions;
 import com.google.android.gms.maps.model.TileProvider;
-import com.google.android.gms.maps.model.UrlTileProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.gson.JsonObject;
 
-import java.io.BufferedInputStream;
 import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.MalformedURLException;
-import java.net.URL;
 
 public class FloorFragment extends Fragment implements OnMapReadyCallback {
 
@@ -115,9 +108,10 @@ public class FloorFragment extends Fragment implements OnMapReadyCallback {
                 addUserMarker(GeneralFunctions.getProfilePic(getActivity()), latLng, googleMap);
                 // Send information about new marker to FireBase Database
                 JsonObject data = new JsonObject();
-                data.addProperty("Location", "The Lat and Long of user's location");
-                data.get("Location").getAsJsonObject().addProperty("Longitude", latLng.longitude);
-                data.get("Location").getAsJsonObject().addProperty("Latitude", latLng.latitude);
+                JsonObject location = new JsonObject();
+                location.addProperty("Longitude", latLng.longitude);
+                location.addProperty("Latitude", latLng.latitude);
+                data.add("Location", location);
                 data.addProperty("Email", FirebaseAuth.getInstance().getCurrentUser().getEmail());
                 GeneralFunctions.writeToDatabase("placeholder", data);
             }
