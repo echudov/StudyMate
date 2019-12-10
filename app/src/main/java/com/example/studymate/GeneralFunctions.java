@@ -93,8 +93,8 @@ public class GeneralFunctions {
                 referenceToWrite = currentDatabase.getReference(path + "Latitude");
                 referenceToWrite.setValue(value.getAsJsonPrimitive("Latitude").getAsDouble());
 
-
-
+                referenceToWrite = currentDatabase.getReference(path + "Longitude");
+                referenceToWrite.setValue(value.getAsJsonPrimitive("Longitude").getAsDouble());
         }
 
     }
