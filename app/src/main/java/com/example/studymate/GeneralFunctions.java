@@ -75,7 +75,9 @@ public class GeneralFunctions {
             case "sitDown":
                 // send shit w/ info about user sitting down
                 DatabaseReference referenceToWrite = currentDatabase.getReference("users");
-                referenceToWrite.setValue(value.getAsJsonObject("location").getAsJsonPrimitive("latitude"));
+                referenceToWrite.setValue(value.getAsJsonObject("Location").getAsJsonPrimitive("Latitude"));
+                referenceToWrite.setValue(value.getAsJsonObject("Location").getAsJsonPrimitive("Longitude"));
+                referenceToWrite.setValue(value.getAsJsonObject("Email").getAsJsonPrimitive());
         }
 
     }

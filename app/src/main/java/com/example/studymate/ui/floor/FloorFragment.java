@@ -111,7 +111,6 @@ public class FloorFragment extends Fragment implements OnMapReadyCallback {
 
                 JsonObject data = new JsonObject();
                 JsonObject location = new JsonObject();
-                JsonArray array = new JsonArray();
                 location.addProperty("Longitude", latLng.longitude);
                 location.addProperty("Latitude", latLng.latitude);
                 data.add("Location", location);
