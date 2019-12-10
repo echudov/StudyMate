@@ -18,6 +18,9 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.gson.JsonObject;
 
 import java.io.InputStream;
+import java.net.MalformedURLException;
+import java.net.URI;
+import java.net.URL;
 
 public class GeneralFunctions {
     public static String getEmail(Activity context) {
@@ -33,10 +36,16 @@ public class GeneralFunctions {
     public static Bitmap getProfilePic(Activity context) {
         FirebaseUser acct = FirebaseAuth.getInstance().getCurrentUser();
         Bitmap profilePic = null;
-        String url = acct.getPhotoUrl().toString();
+        Uri uri = acct.getPhotoUrl();
+        URL url = null;
+        try {
+            url = new URL(uri.toString());
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
         System.out.println(url);
         try {
-            InputStream inputStream = new java.net.URL(url).openStream();
+            InputStream inputStream = url.openStream();
             profilePic = BitmapFactory.decodeStream(inputStream);
         } catch (Exception e) {
             Log.e("Error: ", e.getMessage());
