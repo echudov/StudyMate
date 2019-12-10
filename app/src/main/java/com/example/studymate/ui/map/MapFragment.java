@@ -7,12 +7,8 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProviders;
-import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
 
-import com.example.studymate.MainScreenActivity;
 import com.example.studymate.R;
 import com.example.studymate.ui.floor.FloorFragment;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -23,9 +19,6 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
-
-import java.util.HashMap;
-import java.util.Map;
 
 public class MapFragment extends Fragment implements OnMapReadyCallback {
 
