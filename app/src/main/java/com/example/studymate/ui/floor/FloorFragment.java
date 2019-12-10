@@ -117,7 +117,6 @@ public class FloorFragment extends Fragment implements OnMapReadyCallback {
             }
         });
 
-
         // Logic for adding tile overlay
         TileProvider tileProvider = new TileProvider() {
             public Tile getTile(int x, int y, int zoom) {
