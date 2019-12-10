@@ -29,7 +29,12 @@ import com.google.android.gms.maps.model.Tile;
 import com.google.android.gms.maps.model.TileOverlay;
 import com.google.android.gms.maps.model.TileOverlayOptions;
 import com.google.android.gms.maps.model.TileProvider;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import com.google.android.gms.maps.model.UrlTileProvider;
+
+import org.json.JSONObject;
 
 import java.io.BufferedInputStream;
 import java.io.ByteArrayOutputStream;
@@ -116,6 +121,14 @@ public class FloorFragment extends Fragment implements OnMapReadyCallback {
                         .position(latLng)
                         .title("Your marker title")
                         .snippet("Your marker snippet").icon(icon));
+
+                // Send information about new marker to FireBase Database
+                JsonObject data = new JsonObject();
+                data.addProperty("Location", "The Lat and Long of user's location");
+                data.get("Location").getAsJsonObject().addProperty("Longitude", latLng.longitude);
+                data.get("Location").getAsJsonObject().addProperty("Latitude", latLng.latitude);
+                data.addProperty("Email", FirebaseAuth.getInstance().getCurrentUser().getEmail());
+                GeneralFunctions.writeToDatabase("placeholder", data);
             }
         });
 
