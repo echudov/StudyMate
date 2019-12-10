@@ -30,22 +30,16 @@ public class GeneralFunctions {
     public static Bitmap getProfilePic(Activity context) {
         FirebaseUser acct = FirebaseAuth.getInstance().getCurrentUser();
         Bitmap profilePic = null;
+        String url = acct.getPhotoUrl().toString();
+        System.out.println(url);
         try {
-            String url = acct.getPhotoUrl().toString();
-
-            try {
-                InputStream inputStream = new java.net.URL(url).openStream();
-                profilePic = BitmapFactory.decodeStream(inputStream);
-            } catch (Exception e) {
-                Log.e("Error: ", e.getMessage());
-                e.printStackTrace();
-            }
-            return profilePic;
+            InputStream inputStream = new java.net.URL(url).openStream();
+            profilePic = BitmapFactory.decodeStream(inputStream);
         } catch (Exception e) {
-            System.out.println("Could not locate image url");
+            Log.e("Error: ", e.getMessage());
             e.printStackTrace();
-            return profilePic;
         }
+        return profilePic;
     }
 
     /**

@@ -110,12 +110,7 @@ public class FloorFragment extends Fragment implements OnMapReadyCallback {
         mMap.setOnMapLongClickListener(new GoogleMap.OnMapLongClickListener() {
             @Override
             public void onMapLongClick(LatLng latLng) {
-                BitmapDescriptor icon = BitmapDescriptorFactory
-                        .fromBitmap(GeneralFunctions.getProfilePic(getActivity()));
-                googleMap.addMarker(new MarkerOptions()
-                        .position(latLng)
-                        .title("Your marker title")
-                        .snippet("Your marker snippet").icon(icon));
+                addUserMarker(GeneralFunctions.getProfilePic(getActivity()), latLng, googleMap);
             }
         });
 
@@ -165,6 +160,15 @@ public class FloorFragment extends Fragment implements OnMapReadyCallback {
 
         TileOverlay tileOverlay = mMap.addTileOverlay(new TileOverlayOptions()
                 .tileProvider(tileProvider));
+    }
+
+    private void addUserMarker(Bitmap picture, LatLng location, GoogleMap googleMap) {
+        BitmapDescriptor icon = BitmapDescriptorFactory
+                .fromBitmap(picture);
+        googleMap.addMarker(new MarkerOptions()
+                .position(location)
+                .title("Your marker title")
+                .snippet("Your marker snippet").icon(icon));
     }
 
 }
