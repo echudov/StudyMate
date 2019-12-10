@@ -58,8 +58,7 @@ public class LoginActivity extends AppCompatActivity {
             System.out.println("got interrupted");
         }
         */
-        FirebaseUser account = mAuth.getCurrentUser();
-        updateUI(account);
+        updateUI(null);
     }
 
     private void updateUI(FirebaseUser account) {
