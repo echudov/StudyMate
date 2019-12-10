@@ -104,9 +104,10 @@ public class FloorFragment extends Fragment implements OnMapReadyCallback {
         mMap.setOnMapLongClickListener(new GoogleMap.OnMapLongClickListener() {
             @Override
             public void onMapLongClick(LatLng latLng) {
-                // addUserMarker(GeneralFunctions.getProfilePic(getActivity()), latLng, googleMap);
+                addUserMarker(GeneralFunctions.getProfilePic(getActivity()), latLng, googleMap);
                 // Send information about new marker to FireBase Database
 
+                /*
                 JsonObject data = new JsonObject();
                 JsonObject location = new JsonObject();
                 location.addProperty("Longitude", latLng.longitude);
@@ -114,6 +115,8 @@ public class FloorFragment extends Fragment implements OnMapReadyCallback {
                 data.add("Location", location);
                 data.addProperty("Email", FirebaseAuth.getInstance().getCurrentUser().getEmail());
                 GeneralFunctions.writeToDatabase("", data, "sitDown");
+
+                 */
 
 
             }

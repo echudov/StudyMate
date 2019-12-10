@@ -9,6 +9,7 @@ import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
 import android.graphics.Rect;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.util.Log;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -17,6 +18,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.gson.JsonObject;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URI;
@@ -33,6 +35,9 @@ public class GeneralFunctions {
             return "";
         }
     }
+
+
+
     public static Bitmap getProfilePic(Activity context) {
         FirebaseUser acct = FirebaseAuth.getInstance().getCurrentUser();
         Bitmap profilePic = null;
@@ -44,14 +49,26 @@ public class GeneralFunctions {
             e.printStackTrace();
         }
         System.out.println(url);
+        InputStream inputStream = null;
         try {
-            InputStream inputStream = url.openStream();
-            profilePic = BitmapFactory.decodeStream(inputStream);
-        } catch (Exception e) {
-            Log.e("Error: ", e.getMessage());
+            inputStream = url.openStream();
+        } catch (IOException e) {
             e.printStackTrace();
         }
+        profilePic = BitmapFactory.decodeStream(inputStream);
         return profilePic;
+
+        abstract class DownloadImageTask extends AsyncTask {
+            protected Bitmap doInBackground(String url) {
+                InputStream inputStream = new URL(url).openStream();
+                Bitmap pic = BitmapFactory.decodeStream(inputStream);
+                return pic
+            }
+
+            protected void onPostExecute(Bitmap result) {
+                ;
+            }
+        }
     }
 
     /**
