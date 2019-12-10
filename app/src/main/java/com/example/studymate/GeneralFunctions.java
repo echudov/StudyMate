@@ -8,6 +8,7 @@ import android.graphics.Paint;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
 import android.graphics.Rect;
+import android.net.Uri;
 import android.util.Log;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -83,10 +84,17 @@ public class GeneralFunctions {
         switch(postRequest) {
             case "sitDown":
                 // send shit w/ info about user sitting down
-                DatabaseReference referenceToWrite = currentDatabase.getReference("users");
-                referenceToWrite.setValue(value.getAsJsonObject("Location").getAsJsonPrimitive("Latitude"));
-                referenceToWrite.setValue(value.getAsJsonObject("Location").getAsJsonPrimitive("Longitude"));
-                referenceToWrite.setValue(value.getAsJsonObject("Email").getAsJsonPrimitive());
+                String email = value.getAsJsonPrimitive("Email").getAsString();
+                String path = "users" + email;
+
+                DatabaseReference referenceToWrite = currentDatabase.getReference(path);
+                referenceToWrite.setValue(email);
+
+                referenceToWrite = currentDatabase.getReference(path + "Latitude");
+                referenceToWrite.setValue(value.getAsJsonPrimitive("Latitude").getAsDouble());
+
+
+
         }
 
     }

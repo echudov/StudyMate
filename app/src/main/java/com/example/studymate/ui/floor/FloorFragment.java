@@ -70,7 +70,6 @@ public class FloorFragment extends Fragment implements OnMapReadyCallback {
 
         return root;
     }
-e.printStackTrace();
 
 
     /**
@@ -114,7 +113,7 @@ e.printStackTrace();
                 location.addProperty("Latitude", latLng.latitude);
                 data.add("Location", location);
                 data.addProperty("Email", FirebaseAuth.getInstance().getCurrentUser().getEmail());
-                GeneralFunctions.writeToDatabase("", data);
+                GeneralFunctions.writeToDatabase("", data, "sitDown");
 
 
             }
