@@ -31,6 +31,7 @@ import com.google.android.gms.maps.model.TileOverlayOptions;
 import com.google.android.gms.maps.model.TileProvider;
 import com.google.android.gms.maps.model.UrlTileProvider;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.gson.JsonObject;
 
 import java.io.BufferedInputStream;
@@ -112,14 +113,19 @@ public class FloorFragment extends Fragment implements OnMapReadyCallback {
         mMap.setOnMapLongClickListener(new GoogleMap.OnMapLongClickListener() {
             @Override
             public void onMapLongClick(LatLng latLng) {
-                addUserMarker(GeneralFunctions.getProfilePic(getActivity()), latLng, googleMap);
+                // addUserMarker(GeneralFunctions.getProfilePic(getActivity()), latLng, googleMap);
                 // Send information about new marker to FireBase Database
                 JsonObject data = new JsonObject();
+                data.addProperty("latitude", latLng.latitude);
+                data.addProperty("longitude", latLng.longitude);
+                /*
                 data.addProperty("Location", "The Lat and Long of user's location");
                 data.get("Location").getAsJsonObject().addProperty("Longitude", latLng.longitude);
                 data.get("Location").getAsJsonObject().addProperty("Latitude", latLng.latitude);
                 data.addProperty("Email", FirebaseAuth.getInstance().getCurrentUser().getEmail());
-                GeneralFunctions.writeToDatabase("placeholder", data);
+
+                 */
+                GeneralFunctions.writeToDatabase(FirebaseDatabase.getInstance().getReference(), data);
             }
         });
 
