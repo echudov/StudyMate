@@ -65,15 +65,11 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
 
         // Add a marker in Sydney and move the camera
         LatLng grainger = new LatLng(40.112485, -88.226841);
-        LatLng ugl = new LatLng();
 
         Marker marker_at_grainger = mMap.addMarker(new MarkerOptions().position(grainger).title("Grainger Library"));
-        Marker marker_at_ugl = mMap.addMarker(new MarkerOptions().position(ugl).title("Undergraduate Library"));
         mMap.setOnInfoWindowClickListener(marker -> {
             if (marker.equals(marker_at_grainger)) {
                 selectLibrary("grainger", "1");
-            } else if (marker.equals(marker_at_ugl)) {
-                selectLibrary("ugl", "B1");
             }
         });
         mMap.moveCamera(CameraUpdateFactory.newLatLng(grainger));
