@@ -14,6 +14,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.gson.JsonObject;
 
 import java.io.InputStream;
 
@@ -68,10 +69,16 @@ public class GeneralFunctions {
      * @param reference The name of the location in the database
      * @param value The data to save
      */
-    public static void writeToDatabase(String reference, Object value) {
+    public static void writeToDatabase(String reference, JsonObject value, String postRequest) {
         FirebaseDatabase currentDatabase = FirebaseDatabase.getInstance();
-        DatabaseReference referenceToWrite = currentDatabase.getReference(reference);
-        referenceToWrite.setValue(value);
+        switch(postRequest) {
+            case "sitDown":
+                // send shit w/ info about user sitting down
+                DatabaseReference referenceToWrite = currentDatabase.getReference("users" + value.getAsJsonPrimitive("email"));
+                referenceToWrite.setValue(value.getAsJsonObject("location").getAsJsonPrimitive("latitude"));
+
+        }
+
     }
 
     /**
