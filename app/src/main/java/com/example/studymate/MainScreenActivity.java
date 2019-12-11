@@ -77,7 +77,7 @@ public class MainScreenActivity extends AppCompatActivity {
                     // ...
                     mostRecentLocation = new LatLng (location.getLatitude(), location.getLongitude());
                 }
-            };
+            }
         };
         locationRequest = LocationRequest.create();
         locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);

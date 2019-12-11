@@ -60,7 +60,7 @@ public class FloorFragment extends Fragment implements OnMapReadyCallback {
         View root = inflater.inflate(R.layout.fragment_floor, container, false);
 
 
-        mMapView = (MapView) root.findViewById(R.id.mapView);
+        mMapView = root.findViewById(R.id.mapView);
         mMapView.onCreate(savedInstanceState);
         mMapView.onResume();
 
@@ -184,11 +184,7 @@ public class FloorFragment extends Fragment implements OnMapReadyCallback {
                 int minZoom = 0;
                 int maxZoom = 4;
 
-                if ((zoom < minZoom || zoom > maxZoom)) {
-                    return false;
-                }
-
-                return true;
+                return (zoom >= minZoom && zoom <= maxZoom);
             }
 
             public byte[] getBytesFromBitmap(Bitmap bitmap) {
