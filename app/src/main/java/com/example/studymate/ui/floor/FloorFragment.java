@@ -103,7 +103,7 @@ public class FloorFragment extends Fragment implements OnMapReadyCallback {
 
         mMap.setMinZoomPreference(3.5f);
         mMap.setMaxZoomPreference(4.0f);
-        LatLngBounds grainger2 = new LatLngBounds(new LatLng(90-9, -180 + 18), new LatLng(90, 0));
+        LatLngBounds grainger2 = new LatLngBounds(new LatLng(90-12, -180 + 18), new LatLng(90, 0));
         mMap.moveCamera(CameraUpdateFactory.newLatLng(grainger2.getCenter()));
         mMap.animateCamera(CameraUpdateFactory.zoomTo(3.5f));
         mMap.setLatLngBoundsForCameraTarget(grainger2);
