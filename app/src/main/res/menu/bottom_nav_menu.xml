@@ -12,9 +12,9 @@
         android:title="@string/title_floor" />
 
     <item
-        android:id="@+id/navigation_notifications"
+        android:id="@+id/navigation_search"
         android:icon="@drawable/ic_notifications_black_24dp"
-        android:title="@string/title_notifications" />
+        android:title="@string/title_search" />
     <item
         android:id="@+id/navigation_settings"
         android:icon="@drawable/ic_settings_applications_24px"

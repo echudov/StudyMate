@@ -118,4 +118,8 @@ public class GeneralFunctions {
         DatabaseReference referenceToClear = currentDatabase.getReference(reference);
         referenceToClear.removeValue();
     }
+
+    public static SearchResultData[] pullUsersFromDatabase() {
+
+    }
 }
