@@ -9,6 +9,7 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
 
+import com.example.studymate.MainScreenActivity;
 import com.example.studymate.R;
 import com.example.studymate.ui.floor.FloorFragment;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -77,11 +78,9 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         mMap.moveCamera(CameraUpdateFactory.newLatLng(grainger));
         mMap.animateCamera(CameraUpdateFactory.zoomTo(18.0f));
     }
+
     public void selectLibrary(String library, String floor) {
-        getActivity().getSupportFragmentManager().
-                beginTransaction().
-                replace(R.id.nav_host_fragment, new FloorFragment()).
-                addToBackStack(null).
-                commit();
+        MainScreenActivity activity = (MainScreenActivity) getActivity();
+        activity.switchToFloor("grainger");
     }
 }

@@ -6,10 +6,13 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.text.InputType;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
@@ -43,6 +46,7 @@ import java.io.InputStream;
 
 public class FloorFragment extends Fragment implements OnMapReadyCallback {
 
+    private static final String TAG = "FloorFragment";
     private FloorViewModel floorViewModel;
     private MapView mMapView;
 
@@ -50,8 +54,13 @@ public class FloorFragment extends Fragment implements OnMapReadyCallback {
 
     private GoogleMap mMap;
     private UiSettings mUiSettings;
+    private TileOverlay tileOverlay;
 
     private String studying;
+    private String library = "grainger";
+    private int floor = 1;
+    private RadioGroup floorSelector;
+
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         mapSynced = false;
@@ -59,7 +68,9 @@ public class FloorFragment extends Fragment implements OnMapReadyCallback {
                 ViewModelProviders.of(this).get(FloorViewModel.class);
         View root = inflater.inflate(R.layout.fragment_floor, container, false);
 
-
+        if (getArguments() != null) {
+            library = getArguments().getString("library");
+        }
         mMapView = root.findViewById(R.id.mapView);
         mMapView.onCreate(savedInstanceState);
         mMapView.onResume();
@@ -73,6 +84,35 @@ public class FloorFragment extends Fragment implements OnMapReadyCallback {
 
         mMapView.getMapAsync(this::onMapReady);
         mapSynced = true;
+
+        RadioGroup floorSelector = root.findViewById(R.id.floorSelector);
+        int id = getResources().getIdentifier("floorLevel" + floor, "id", getActivity().getPackageName());
+        RadioButton selectedFloor = floorSelector.findViewById(id);
+        selectedFloor.toggle();
+
+        floorSelector.setOnCheckedChangeListener((radioGroup, checkedId) -> {
+            switch(checkedId) {
+                case R.id.floorLevel0:
+                    floor = 0;
+                    break;
+                case R.id.floorLevel1:
+                    floor = 1;
+                    break;
+                case R.id.floorLevel2:
+                    floor = 2;
+                    break;
+                case R.id.floorLevel3:
+                    floor = 3;
+                    break;
+                case R.id.floorLevel4:
+                    floor = 4;
+                    break;
+                default:
+                    Log.v(TAG, "this isn't supposed to happen lol");
+            }
+            tileOverlay.remove();
+            addTileOverlay(floor);
+        });
 
 
         return root;
@@ -97,16 +137,13 @@ public class FloorFragment extends Fragment implements OnMapReadyCallback {
         mUiSettings.setMapToolbarEnabled(true);
         mUiSettings.setTiltGesturesEnabled(false);
         mMap.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
-        // Add a marker at Grainger
-        LatLng grainger = new LatLng(40.112485, -88.226841);
-        mMap.addMarker(new MarkerOptions().position(grainger).title("Marker at Grainger"));
 
         mMap.setMinZoomPreference(3.5f);
         mMap.setMaxZoomPreference(4.0f);
-        LatLngBounds grainger2 = new LatLngBounds(new LatLng(90-12, -180 + 18), new LatLng(90, 0));
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(grainger2.getCenter()));
+        LatLngBounds graingerBounds = new LatLngBounds(new LatLng(90-11, -180 + 24), new LatLng(90, 0));
+        mMap.moveCamera(CameraUpdateFactory.newLatLng(graingerBounds.getCenter()));
         mMap.animateCamera(CameraUpdateFactory.zoomTo(3.5f));
-        mMap.setLatLngBoundsForCameraTarget(grainger2);
+        mMap.setLatLngBoundsForCameraTarget(graingerBounds);
 
         mMap.setOnMapLongClickListener(new GoogleMap.OnMapLongClickListener() {
             @Override
@@ -153,8 +190,19 @@ public class FloorFragment extends Fragment implements OnMapReadyCallback {
 
             }
         });
+        addTileOverlay(floor);
 
 
+    }
+
+    private void addUserMarker(String contentStudying, LatLng location, GoogleMap googleMap) {
+        googleMap.addMarker(new MarkerOptions()
+                .position(location)
+                .title(GeneralFunctions.getEmail(getActivity()))
+                .snippet(contentStudying));
+    }
+
+    private void addTileOverlay(int level) {
         // Logic for adding tile overlay
         TileProvider tileProvider = new TileProvider() {
             public Tile getTile(int x, int y, int zoom) {
@@ -163,7 +211,7 @@ public class FloorFragment extends Fragment implements OnMapReadyCallback {
                 }
                 String fileLocation;
                 // this is not correct, figure out which file to pull from.
-                fileLocation = "libraries" + "/grainger" + "/floor" + 2 + "/" + zoom + "/" + x + "/" + y + ".png"; //need to add x and y
+                fileLocation = "libraries" + "/" + library + "/floor" + level + "/" + zoom + "/" + x + "/" + y + ".png"; //need to add x and y
                 InputStream inputStream = null;
                 try {
                     inputStream = getContext().getAssets().open(fileLocation);
@@ -194,15 +242,8 @@ public class FloorFragment extends Fragment implements OnMapReadyCallback {
             }
         };
 
-        TileOverlay tileOverlay = mMap.addTileOverlay(new TileOverlayOptions()
+        tileOverlay = mMap.addTileOverlay(new TileOverlayOptions()
                 .tileProvider(tileProvider));
-    }
-
-    private void addUserMarker(String contentStudying, LatLng location, GoogleMap googleMap) {
-        googleMap.addMarker(new MarkerOptions()
-                .position(location)
-                .title(GeneralFunctions.getEmail(getActivity()))
-                .snippet(contentStudying));
     }
 
 }

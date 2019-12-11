@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:id="@+id/fragment_floor">
@@ -9,4 +10,51 @@
         android:id="@+id/mapView"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
+
+    <RadioGroup
+        android:id="@+id/floorSelector"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="24dp"
+        android:layout_marginBottom="24dp"
+        android:background="@color/colorUnchecked"
+        app:layout_constraintBottom_toBottomOf="@+id/mapView"
+        app:layout_constraintEnd_toEndOf="@+id/mapView">
+
+        <RadioButton
+            android:id="@+id/floorLevel4"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="4"
+            android:textColorHighlight="@color/colorAccent" />
+
+        <RadioButton
+            android:id="@+id/floorLevel3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="3"
+            android:textColorHighlight="@color/colorAccent" />
+
+        <RadioButton
+            android:id="@+id/floorLevel2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="2"
+            android:textColorHighlight="@color/colorAccent" />
+
+        <RadioButton
+            android:id="@+id/floorLevel1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="1"
+            android:textColorHighlight="@color/colorAccent" />
+
+        <RadioButton
+            android:id="@+id/floorLevel0"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="B1"
+            tools:textColorHighlight="@color/colorAccent" />
+    </RadioGroup>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

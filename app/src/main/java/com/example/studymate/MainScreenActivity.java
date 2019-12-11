@@ -21,6 +21,8 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
+import java.util.List;
+
 public class MainScreenActivity extends AppCompatActivity {
 
 
@@ -31,6 +33,7 @@ public class MainScreenActivity extends AppCompatActivity {
     private LocationRequest locationRequest;
     private LatLng mostRecentLocation;
 
+    private NavController navController;
 
     private boolean hasLocationPermission;
 
@@ -41,7 +44,7 @@ public class MainScreenActivity extends AppCompatActivity {
         BottomNavigationView navView = findViewById(R.id.nav_view);
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
-        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
+        navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         // Possibly use the action bar, but still unsure
         // DON'T FORGET TO CHANGE styles.xml to DarkActionBar
         // AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(
@@ -53,6 +56,7 @@ public class MainScreenActivity extends AppCompatActivity {
         // LOCATION DATA FOR USER
         // IMPLEMENT PRERERENCE TO KEEP IT EITHER HIDDEN FROM OTHERS /
         // NOT USED
+
 
         // hasLocationPermission change based on settings preferences, no idea how to do that rn
         // madhav if you could help that would be brain boosting
@@ -89,12 +93,11 @@ public class MainScreenActivity extends AppCompatActivity {
                 locationCallback,
                 Looper.getMainLooper());
     }
-    public void loadFragment(Fragment fragment) {
-        // load fragment
-        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction.replace(R.id.nav_view, fragment);
-        transaction.addToBackStack(null);
-        transaction.commit();
+
+    public void switchToFloor(String library) {
+        Bundle bundle = new Bundle();
+        bundle.putString("library", library);
+        navController.navigate(R.id.action_navigation_map_to_navigation_floor, bundle);
     }
 
 }

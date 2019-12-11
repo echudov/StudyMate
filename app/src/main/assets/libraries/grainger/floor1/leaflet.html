@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>grainger1</title>
+    <title>floor1</title>
     <meta charset="utf-8">
     <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
@@ -18,12 +18,12 @@
     <div id="map"></div>
     <input id="slider" type="range" min="0" max="1" step="0.1" value="1" oninput="layer.setOpacity(this.value)">
     <script type="text/javascript">
-      var mapExtent = [0.00000000, -694.00000000, 1864.00000000, 0.00000000];
+      var mapExtent = [0.00000000, -900.00000000, 2332.00000000, 0.00000000];
       var mapMinZoom = 0;
-      var mapMaxZoom = 3;
+      var mapMaxZoom = 4;
       var mapMaxResolution = 1.00000000;
       var mapMinResolution = Math.pow(2, mapMaxZoom) * mapMaxResolution;
-      var tileExtent = [0.00000000, -694.00000000, 1864.00000000, 0.00000000];
+      var tileExtent = [0.00000000, -900.00000000, 2332.00000000, 0.00000000];
       var crs = L.CRS.Simple;
       crs.transformation = new L.Transformation(1, -tileExtent[0], -1, tileExtent[3]);
       crs.scale = function(zoom) {
