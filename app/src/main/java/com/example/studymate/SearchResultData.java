@@ -95,8 +95,6 @@ public class SearchResultData implements Parcelable {
     public int getFloor() {
         return floor;
     }
-
-    public LatLng getSeatingLatLng() {
-        return new LatLng(seatingLatitude, seatingLongitude);
-    }
+    public double getSeatingLatitude() { return seatingLatitude; }
+    public double getSeatingLongitude() { return seatingLongitude; }
 }

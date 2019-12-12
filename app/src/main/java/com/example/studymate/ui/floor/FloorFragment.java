@@ -134,6 +134,11 @@ public class FloorFragment extends Fragment implements OnMapReadyCallback {
         });
 
 
+
+        System.out.println("goof@gmail.com".hashCode());
+        System.out.println("lol@gmail.com".hashCode());
+        System.out.println("notARealEmail@gmail.com".hashCode());
+        System.out.println("sample@gmail.com".hashCode());
         return root;
     }
 
@@ -235,13 +240,12 @@ public class FloorFragment extends Fragment implements OnMapReadyCallback {
         }
         markersOnMap.clear();
         // Go through all users
-        for(Map.Entry<Integer, SearchResultData> currentEntry : users.entrySet()) {
-            SearchResultData currentUser = currentEntry.getValue();
+        for(SearchResultData currentUser : users.values()) {
             // Check if in correct library & correct floor
             if (currentUser.getLibrary().equals("grainger") && currentUser.getFloor() == floor) {
                 // Add marker
                 MarkerOptions markerOptions = new MarkerOptions()
-                    .position(currentUser.getSeatingLatLng())
+                    .position(new LatLng(currentUser.getSeatingLatitude(), currentUser.getSeatingLongitude()))
                     .title(GeneralFunctions.getEmail(currentActivity))
                     .snippet(currentUser.getStudyingContent());
                 Marker justAdded = mMap.addMarker(markerOptions);
@@ -339,9 +343,11 @@ public class FloorFragment extends Fragment implements OnMapReadyCallback {
                 for (DataSnapshot values : dataSnapshot.getChildren()) {
                     SearchResultData searchResultData = values.getValue(SearchResultData.class);
                     srd.add(searchResultData);
+                    System.out.println(values.toString());
                 }
                 for (SearchResultData user : srd) {
                     if (user != null) {
+                        System.out.println("here");
                         users.put(user.getSearchQueryNumber(), user);
                     }
                 }

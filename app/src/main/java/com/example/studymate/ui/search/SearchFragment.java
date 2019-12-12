@@ -162,7 +162,7 @@ public class SearchFragment extends Fragment {
 
             Button switchToMap = convertView.findViewById(R.id.switchToMapButton);
             switchToMap.setOnClickListener(unused -> {
-                switchToMap(currentItem.getLibrary(), currentItem.getFloor(), currentItem.getSeatingLatLng());
+                switchToMap(currentItem.getLibrary(), currentItem.getFloor(), new LatLng(currentItem.getSeatingLatitude(), currentItem.getSeatingLongitude()));
             });
             
             Button sendUserMessage = convertView.findViewById(R.id.messageUserButton);

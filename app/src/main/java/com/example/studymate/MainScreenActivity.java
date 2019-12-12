@@ -72,6 +72,7 @@ public class MainScreenActivity extends AppCompatActivity {
                         }
                     }
                 });
+
         locationCallback = new LocationCallback() {
             public void onLocationResult(LocationResult locationResult) {
                 if (locationResult == null) {
