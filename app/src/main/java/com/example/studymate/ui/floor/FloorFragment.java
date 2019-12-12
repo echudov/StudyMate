@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.SeekBar;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
@@ -40,12 +41,19 @@ import com.google.android.gms.maps.model.TileOverlay;
 import com.google.android.gms.maps.model.TileOverlayOptions;
 import com.google.android.gms.maps.model.TileProvider;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.GenericTypeIndicator;
+import com.google.firebase.database.ValueEventListener;
 import com.google.gson.JsonObject;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class FloorFragment extends Fragment implements OnMapReadyCallback {
 
@@ -92,7 +100,7 @@ public class FloorFragment extends Fragment implements OnMapReadyCallback {
         mMapView.getMapAsync(this::onMapReady);
         mapSynced = true;
 
-        RadioGroup floorSelector = root.findViewById(R.id.floorSelector);
+        floorSelector = root.findViewById(R.id.floorSelector);
         int id = getResources().getIdentifier("floorLevel" + floor, "id", getActivity().getPackageName());
         RadioButton selectedFloor = floorSelector.findViewById(id);
         selectedFloor.toggle();
@@ -248,4 +256,51 @@ public class FloorFragment extends Fragment implements OnMapReadyCallback {
                 .tileProvider(tileProvider));
     }
 
+    private void listenForUserChanges(Map<Integer, SearchResultData> users) {
+        ValueEventListener postListener = new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                // Get Post object and use the values to update the UI
+                GenericTypeIndicator<List<SearchResultData>> genericTypeIndicator =new GenericTypeIndicator<List<SearchResultData>>(){};
+
+                List<SearchResultData> srd = dataSnapshot.getValue(genericTypeIndicator);
+                for (SearchResultData user : srd) {
+                    users.put(user.getSearchQueryNumber(), user);
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                // Getting Post failed, log a message
+                Log.w(TAG, "loadPost:onCancelled", databaseError.toException());
+                // ...
+            }
+        };
+        FirebaseDatabase currentDatabase = FirebaseDatabase.getInstance();
+        currentDatabase.getReference("users").addValueEventListener(postListener);
+    }
+
+    private void initializeMap(Map<Integer, SearchResultData> users) {
+        ValueEventListener postListener = new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                // Get Post object and use the values to update the UI
+                GenericTypeIndicator<List<SearchResultData>> genericTypeIndicator =new GenericTypeIndicator<List<SearchResultData>>(){};
+
+                List<SearchResultData> srd = dataSnapshot.getValue(genericTypeIndicator);
+                for (SearchResultData user : srd) {
+                    users.put(user.getSearchQueryNumber(), user);
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                // Getting Post failed, log a message
+                Log.w(TAG, "loadPost:onCancelled", databaseError.toException());
+                // ...
+            }
+        };
+        FirebaseDatabase currentDatabase = FirebaseDatabase.getInstance();
+        currentDatabase.getReference("users").addListenerForSingleValueEvent(postListener);
+    }
 }
