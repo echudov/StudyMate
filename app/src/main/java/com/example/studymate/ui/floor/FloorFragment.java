@@ -1,5 +1,6 @@
 package com.example.studymate.ui.floor;
 
+import android.app.Activity;
 import android.content.DialogInterface;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -103,27 +104,27 @@ public class FloorFragment extends Fragment implements OnMapReadyCallback {
             switch(checkedId) {
                 case R.id.floorLevel0:
                     floor = 0;
-                    addAllMarkers();
+                    addAllMarkers(mMap, markersOnMap, users, getActivity(), floor);
                     break;
                 case R.id.floorLevel1:
                     floor = 1;
-                    addAllMarkers();
+                    addAllMarkers(mMap, markersOnMap, users, getActivity(), floor);
                     break;
                 case R.id.floorLevel2:
                     floor = 2;
-                    addAllMarkers();
+                    addAllMarkers(mMap, markersOnMap, users, getActivity(), floor);
                     break;
                 case R.id.floorLevel3:
                     floor = 3;
-                    addAllMarkers();
+                    addAllMarkers(mMap, markersOnMap, users, getActivity(), floor);
                     break;
                 case R.id.floorLevel4:
                     floor = 4;
-                    addAllMarkers();
+                    addAllMarkers(mMap, markersOnMap, users, getActivity(), floor);
                     break;
                 default:
                     Log.v(TAG, "this isn't supposed to happen lol");
-                    addAllMarkers();
+                    addAllMarkers(mMap, markersOnMap, users, getActivity(), floor);
             }
             tileOverlay.remove();
             addTileOverlay(floor);
@@ -219,7 +220,8 @@ public class FloorFragment extends Fragment implements OnMapReadyCallback {
      * and add markers for each one that is in the current
      * library and floor
      */
-    private void addAllMarkers() {
+    private static void addAllMarkers(GoogleMap mMap, List<Marker> markersOnMap, Map<Integer, SearchResultData> users,
+                                      Activity currentActivity, int floor) {
         // First clear all current markers from map & List
         for (Marker m : markersOnMap) {
             m.remove();
@@ -233,11 +235,11 @@ public class FloorFragment extends Fragment implements OnMapReadyCallback {
                 // Add marker
                 MarkerOptions markerOptions = new MarkerOptions()
                     .position(currentUser.getSeatingLatLng())
-                    .title(GeneralFunctions.getEmail(getActivity()))
+                    .title(GeneralFunctions.getEmail(currentActivity))
                     .snippet(currentUser.getStudyingContent());
-                mostRecent = mMap.addMarker(markerOptions);
+                Marker justAdded = mMap.addMarker(markerOptions);
                 // Add this marker to list
-                markersOnMap.add(mostRecent);
+                markersOnMap.add(justAdded);
             }
         }
     }
