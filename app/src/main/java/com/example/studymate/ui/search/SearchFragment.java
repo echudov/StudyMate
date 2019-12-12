@@ -2,6 +2,7 @@ package com.example.studymate.ui.search;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,15 +21,23 @@ import com.example.studymate.MainScreenActivity;
 import com.example.studymate.R;
 import com.example.studymate.SearchResultData;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.GenericTypeIndicator;
+import com.google.firebase.database.ValueEventListener;
 
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 public class SearchFragment extends Fragment {
 
+    private static final String TAG = "Search Fragment";
     private SearchViewModel searchViewModel;
 
-    private SearchResultData[] importedData;
+    private HashMap<Integer, SearchResultData> importedData;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -39,7 +48,7 @@ public class SearchFragment extends Fragment {
         searchView.setSubmitButtonEnabled(true);
         searchView.setIconifiedByDefault(true);
 
-        importedData = GeneralFunctions.pullUsersFromDatabase();
+        importedData = new HashMap<Integer, SearchResultData>();
 
         SearchResultData samplePerson = new SearchResultData("Calculus 2",
                                                             "testEmail@gmail.com",
@@ -47,12 +56,12 @@ public class SearchFragment extends Fragment {
                                                             1,
                                                             85, -45);
 
-        importedData = new SearchResultData[]{samplePerson};
 
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-                loadSearches(search(query, importedData), root);
+                getData(importedData, TAG);
+                loadSearches(search(query, (SearchResultData[]) importedData.values().toArray()), root);
                 return false;
             }
 
@@ -167,5 +176,30 @@ public class SearchFragment extends Fragment {
     private void switchToMap(String library, int floor, LatLng seatingLatLng) {
         MainScreenActivity activity = (MainScreenActivity) getActivity();
         activity.switchToFloor(library, floor, "search");
+    }
+
+    private static void getData(Map<Integer, SearchResultData> users, String TAG) {
+        ValueEventListener postListener = new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                // Get Post object and use the values to update the UI
+                GenericTypeIndicator<List<SearchResultData>> genericTypeIndicator =new GenericTypeIndicator<List<SearchResultData>>(){};
+
+                List<SearchResultData> srd = dataSnapshot.getValue(genericTypeIndicator);
+                for (SearchResultData user : srd) {
+                    users.put(user.getSearchQueryNumber(), user);
+                }
+                // addAllMarkers();
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                // Getting Post failed, log a message
+                Log.w(TAG, "loadPost:onCancelled", databaseError.toException());
+                // ...
+            }
+        };
+        FirebaseDatabase currentDatabase = FirebaseDatabase.getInstance();
+        currentDatabase.getReference("users").addListenerForSingleValueEvent(postListener);
     }
 }

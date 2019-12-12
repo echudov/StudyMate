@@ -159,6 +159,8 @@ public class FloorFragment extends Fragment implements OnMapReadyCallback {
         mMap.moveCamera(CameraUpdateFactory.newLatLng(graingerBounds.getCenter()));
         mMap.animateCamera(CameraUpdateFactory.zoomTo(3.5f));
         mMap.setLatLngBoundsForCameraTarget(graingerBounds);
+        initializeMap(users, TAG);
+        initializeMap(users, TAG);
 
         mMap.setOnMapLongClickListener(new GoogleMap.OnMapLongClickListener() {
             @Override
@@ -219,7 +221,9 @@ public class FloorFragment extends Fragment implements OnMapReadyCallback {
      */
     private void addAllMarkers() {
         // First clear all current markers from map & List
-        mMap.clear();
+        for (Marker m : markersOnMap) {
+            m.remove();
+        }
         markersOnMap.clear();
         // Go through all users
         for(Map.Entry<Integer, SearchResultData> currentEntry : users.entrySet()) {
@@ -295,7 +299,7 @@ public class FloorFragment extends Fragment implements OnMapReadyCallback {
                 for (SearchResultData user : srd) {
                     users.put(user.getSearchQueryNumber(), user);
                 }
-
+                // addAllMarkers();
             }
 
             @Override
@@ -320,6 +324,7 @@ public class FloorFragment extends Fragment implements OnMapReadyCallback {
                 for (SearchResultData user : srd) {
                     users.put(user.getSearchQueryNumber(), user);
                 }
+                // addAllMarkers();
             }
 
             @Override
