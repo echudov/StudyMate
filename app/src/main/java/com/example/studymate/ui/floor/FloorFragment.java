@@ -1,6 +1,5 @@
 package com.example.studymate.ui.floor;
 
-import android.app.Dialog;
 import android.content.DialogInterface;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -16,7 +15,6 @@ import android.widget.RadioGroup;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
-import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
 
@@ -29,8 +27,6 @@ import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.UiSettings;
-import com.google.android.gms.maps.model.BitmapDescriptor;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
@@ -39,8 +35,6 @@ import com.google.android.gms.maps.model.Tile;
 import com.google.android.gms.maps.model.TileOverlay;
 import com.google.android.gms.maps.model.TileOverlayOptions;
 import com.google.android.gms.maps.model.TileProvider;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.gson.JsonObject;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -104,21 +98,27 @@ public class FloorFragment extends Fragment implements OnMapReadyCallback {
             switch(checkedId) {
                 case R.id.floorLevel0:
                     floor = 0;
+                    addAllMarkers();
                     break;
                 case R.id.floorLevel1:
                     floor = 1;
+                    addAllMarkers();
                     break;
                 case R.id.floorLevel2:
                     floor = 2;
+                    addAllMarkers();
                     break;
                 case R.id.floorLevel3:
                     floor = 3;
+                    addAllMarkers();
                     break;
                 case R.id.floorLevel4:
                     floor = 4;
+                    addAllMarkers();
                     break;
                 default:
                     Log.v(TAG, "this isn't supposed to happen lol");
+                    addAllMarkers();
             }
             tileOverlay.remove();
             addTileOverlay(floor);
@@ -210,9 +210,11 @@ public class FloorFragment extends Fragment implements OnMapReadyCallback {
     /**
      * This helper function will go through all users in the Map
      * and add markers for each one that is in the current
-     * libary and floor
+     * library and floor
      */
     private void addAllMarkers() {
+        // First clear all current markers
+        mMap.clear();
         // Go through all users
         for(Map.Entry<Integer, SearchResultData> currentEntry : users.entrySet()) {
             SearchResultData currentUser = currentEntry.getValue();
@@ -229,6 +231,8 @@ public class FloorFragment extends Fragment implements OnMapReadyCallback {
             }
         }
     }
+
+
 
     private void addTileOverlay(int level) {
         // Logic for adding tile overlay

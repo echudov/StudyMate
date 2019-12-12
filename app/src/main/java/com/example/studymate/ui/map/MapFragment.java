@@ -11,7 +11,6 @@ import androidx.lifecycle.ViewModelProviders;
 
 import com.example.studymate.MainScreenActivity;
 import com.example.studymate.R;
-import com.example.studymate.ui.floor.FloorFragment;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
