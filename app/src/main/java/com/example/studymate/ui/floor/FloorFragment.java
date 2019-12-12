@@ -46,6 +46,8 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class FloorFragment extends Fragment implements OnMapReadyCallback {
 
@@ -61,6 +63,7 @@ public class FloorFragment extends Fragment implements OnMapReadyCallback {
     private Marker mostRecent = null;
 
     private HashMap<Integer, SearchResultData> users;
+    private List<Marker> markersOnMap;
 
     private String studying;
     private String library = "grainger";
@@ -202,6 +205,29 @@ public class FloorFragment extends Fragment implements OnMapReadyCallback {
                 .position(location)
                 .title(GeneralFunctions.getEmail(getActivity()))
                 .snippet(contentStudying));
+    }
+
+    /**
+     * This helper function will go through all users in the Map
+     * and add markers for each one that is in the current
+     * libary and floor
+     */
+    private void addAllMarkers() {
+        // Go through all users
+        for(Map.Entry<Integer, SearchResultData> currentEntry : users.entrySet()) {
+            SearchResultData currentUser = currentEntry.getValue();
+            // Check if in correct library & correct floor
+            if (currentUser.getLibrary().equals("grainger") && currentUser.getFloor() == floor) {
+                // Add marker
+                MarkerOptions markerOptions = new MarkerOptions()
+                    .position(currentUser.getSeatingLatLng())
+                    .title(GeneralFunctions.getEmail(getActivity()))
+                    .snippet(currentUser.getStudyingContent());
+                mostRecent = mMap.addMarker(markerOptions);
+                // Add this marker to list
+                markersOnMap.add(mostRecent);
+            }
+        }
     }
 
     private void addTileOverlay(int level) {
