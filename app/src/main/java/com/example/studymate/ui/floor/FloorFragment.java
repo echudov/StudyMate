@@ -45,6 +45,7 @@ import com.google.firebase.database.ValueEventListener;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -94,6 +95,8 @@ public class FloorFragment extends Fragment implements OnMapReadyCallback {
 
         mMapView.getMapAsync(this::onMapReady);
         mapSynced = true;
+
+        users = new HashMap<Integer, SearchResultData>();
 
         RadioGroup floorSelector = root.findViewById(R.id.floorSelector);
         int id = getResources().getIdentifier("floorLevel" + floor, "id", getActivity().getPackageName());
@@ -160,8 +163,9 @@ public class FloorFragment extends Fragment implements OnMapReadyCallback {
         mMap.moveCamera(CameraUpdateFactory.newLatLng(graingerBounds.getCenter()));
         mMap.animateCamera(CameraUpdateFactory.zoomTo(3.5f));
         mMap.setLatLngBoundsForCameraTarget(graingerBounds);
-        initializeMap(users, TAG);
-        initializeMap(users, TAG);
+        markersOnMap = new ArrayList<Marker>();
+        initializeMap(users, TAG, mMap, markersOnMap, getActivity(), floor);
+        listenForUserChanges(users, TAG, mMap, markersOnMap, getActivity(), floor);
 
         mMap.setOnMapLongClickListener(new GoogleMap.OnMapLongClickListener() {
             @Override
@@ -180,7 +184,10 @@ public class FloorFragment extends Fragment implements OnMapReadyCallback {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         studying = input.getText().toString();
-                        mostRecent.remove();
+                        if (mostRecent != null) {
+                            mostRecent.remove();
+                        }
+
                         addUserMarker(studying, latLng, googleMap);
                         // Send information about new marker to FireBase Database
                         SearchResultData toSend = new SearchResultData(mostRecent.getSnippet(),
@@ -290,18 +297,24 @@ public class FloorFragment extends Fragment implements OnMapReadyCallback {
                 .tileProvider(tileProvider));
     }
 
-    private static void listenForUserChanges(Map<Integer, SearchResultData> users, String TAG) {
+    private static void listenForUserChanges(Map<Integer, SearchResultData> users, String TAG, GoogleMap mMap, List<Marker> markersOnMap, Activity activity, int floor) {
         ValueEventListener postListener = new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 // Get Post object and use the values to update the UI
                 GenericTypeIndicator<List<SearchResultData>> genericTypeIndicator =new GenericTypeIndicator<List<SearchResultData>>(){};
 
-                List<SearchResultData> srd = dataSnapshot.getValue(genericTypeIndicator);
-                for (SearchResultData user : srd) {
-                    users.put(user.getSearchQueryNumber(), user);
+                List<SearchResultData> srd = new ArrayList<SearchResultData>();
+                for (DataSnapshot values : dataSnapshot.getChildren()) {
+                    SearchResultData searchResultData = values.getValue(SearchResultData.class);
+                    srd.add(searchResultData);
                 }
-                // addAllMarkers();
+                for (SearchResultData user : srd) {
+                    if (user != null) {
+                        users.put(user.getSearchQueryNumber(), user);
+                    }
+                }
+                addAllMarkers(mMap, markersOnMap, users, activity, floor);
             }
 
             @Override
@@ -315,18 +328,24 @@ public class FloorFragment extends Fragment implements OnMapReadyCallback {
         currentDatabase.getReference("users").addValueEventListener(postListener);
     }
 
-    private static void initializeMap(Map<Integer, SearchResultData> users, String TAG) {
+    private static void initializeMap(Map<Integer, SearchResultData> users, String TAG, GoogleMap mMap, List<Marker> markersOnMap, Activity activity, int floor) {
         ValueEventListener postListener = new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 // Get Post object and use the values to update the UI
                 GenericTypeIndicator<List<SearchResultData>> genericTypeIndicator =new GenericTypeIndicator<List<SearchResultData>>(){};
 
-                List<SearchResultData> srd = dataSnapshot.getValue(genericTypeIndicator);
-                for (SearchResultData user : srd) {
-                    users.put(user.getSearchQueryNumber(), user);
+                List<SearchResultData> srd = new ArrayList<SearchResultData>();
+                for (DataSnapshot values : dataSnapshot.getChildren()) {
+                    SearchResultData searchResultData = values.getValue(SearchResultData.class);
+                    srd.add(searchResultData);
                 }
-                // addAllMarkers();
+                for (SearchResultData user : srd) {
+                    if (user != null) {
+                        users.put(user.getSearchQueryNumber(), user);
+                    }
+                }
+                addAllMarkers(mMap, markersOnMap, users, activity, floor);
             }
 
             @Override

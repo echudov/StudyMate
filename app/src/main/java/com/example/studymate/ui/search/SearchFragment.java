@@ -27,6 +27,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.GenericTypeIndicator;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -61,7 +62,11 @@ public class SearchFragment extends Fragment {
             @Override
             public boolean onQueryTextSubmit(String query) {
                 getData(importedData, TAG);
-                loadSearches(search(query, (SearchResultData[]) importedData.values().toArray()), root);
+                List<SearchResultData> searchResultData = new ArrayList<SearchResultData>();
+                for (SearchResultData srd : importedData.values()) {
+                    searchResultData.add(srd);
+                }
+                loadSearches(search(query, searchResultData), root);
                 return false;
             }
 
@@ -75,7 +80,7 @@ public class SearchFragment extends Fragment {
         return root;
     }
 
-    private List<SearchResultData> search(String query, SearchResultData[] userStudyingInfo) {
+    private List<SearchResultData> search(String query, List<SearchResultData> userStudyingInfo) {
         if (userStudyingInfo == null || query == null || query == "") {
             return null;
         }
@@ -183,13 +188,17 @@ public class SearchFragment extends Fragment {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 // Get Post object and use the values to update the UI
-                GenericTypeIndicator<List<SearchResultData>> genericTypeIndicator =new GenericTypeIndicator<List<SearchResultData>>(){};
 
-                List<SearchResultData> srd = dataSnapshot.getValue(genericTypeIndicator);
-                for (SearchResultData user : srd) {
-                    users.put(user.getSearchQueryNumber(), user);
+                List<SearchResultData> srd = new ArrayList<SearchResultData>();
+                for (DataSnapshot values : dataSnapshot.getChildren()) {
+                    SearchResultData searchResultData = values.getValue(SearchResultData.class);
+                    srd.add(searchResultData);
                 }
-                // addAllMarkers();
+                for (SearchResultData user : srd) {
+                    if (user != null) {
+                        users.put(user.getSearchQueryNumber(), user);
+                    }
+                }
             }
 
             @Override
