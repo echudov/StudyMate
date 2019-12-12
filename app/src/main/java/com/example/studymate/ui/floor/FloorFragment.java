@@ -45,6 +45,7 @@ import com.google.gson.JsonObject;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.HashMap;
 
 public class FloorFragment extends Fragment implements OnMapReadyCallback {
 
@@ -58,6 +59,8 @@ public class FloorFragment extends Fragment implements OnMapReadyCallback {
     private UiSettings mUiSettings;
     private TileOverlay tileOverlay;
     private Marker mostRecent = null;
+
+    private HashMap<Integer, SearchResultData> users;
 
     private String studying;
     private String library = "grainger";
@@ -166,6 +169,7 @@ public class FloorFragment extends Fragment implements OnMapReadyCallback {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         studying = input.getText().toString();
+                        mostRecent.remove();
                         addUserMarker(studying, latLng, googleMap);
                         // Send information about new marker to FireBase Database
                         SearchResultData toSend = new SearchResultData(mostRecent.getSnippet(),
@@ -185,20 +189,6 @@ public class FloorFragment extends Fragment implements OnMapReadyCallback {
                 });
 
                 builder.show();
-
-
-
-                /*
-                JsonObject data = new JsonObject();
-                JsonObject location = new JsonObject();
-                location.addProperty("Longitude", latLng.longitude);
-                location.addProperty("Latitude", latLng.latitude);
-                data.add("Location", location);
-                data.addProperty("Email", FirebaseAuth.getInstance().getCurrentUser().getEmail());
-                GeneralFunctions.writeToDatabase("", data, "sitDown");
-
-                 */
-
 
             }
         });

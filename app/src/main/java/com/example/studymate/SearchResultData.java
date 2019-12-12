@@ -12,7 +12,7 @@ public class SearchResultData implements Parcelable {
     private String email;
     private String library;
     private int floor;
-    private static int searchQueryNumber = 0;
+    private int searchQueryNumber;
     private double seatingLatitude;
     private double seatingLongitude;
 
@@ -37,7 +37,7 @@ public class SearchResultData implements Parcelable {
         this.studyingContent = setStudyingContent;
         this.email = setEmail;
         this.library = setLibrary;
-        searchQueryNumber++;
+        searchQueryNumber = setEmail.hashCode();
         this.floor = setFloor;
         this.seatingLatitude = setSeatingLatitude;
         this.seatingLongitude = setSeatingLongitude;
