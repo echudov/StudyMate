@@ -94,10 +94,20 @@ public class MainScreenActivity extends AppCompatActivity {
                 Looper.getMainLooper());
     }
 
-    public void switchToFloor(String library) {
+    public void switchToFloor(String library, int floor, String fragment) {
         Bundle bundle = new Bundle();
         bundle.putString("library", library);
-        navController.navigate(R.id.action_navigation_map_to_navigation_floor, bundle);
+        bundle.putInt("floor", floor);
+        switch (fragment) {
+            case "map":
+                navController.navigate(R.id.action_navigation_map_to_navigation_floor, bundle);
+                break;
+            case "search":
+                navController.navigate(R.id.action_navigation_search_to_navigation_floor, bundle);
+                break;
+            default:
+                throw new IllegalStateException("Unexpected value: " + fragment);
+        }
     }
 
 }

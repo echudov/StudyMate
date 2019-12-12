@@ -81,6 +81,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
 
     public void selectLibrary(String library, String floor) {
         MainScreenActivity activity = (MainScreenActivity) getActivity();
-        activity.switchToFloor("grainger");
+        activity.switchToFloor("grainger", 1, "map");
     }
 }

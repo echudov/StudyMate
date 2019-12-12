@@ -31,5 +31,9 @@
         android:id="@+id/navigation_search"
         android:name="com.example.studymate.ui.notifications.SearchFragment"
         android:label="@string/title_search"
-        tools:layout="@layout/fragment_search" />
+        tools:layout="@layout/fragment_search" >
+        <action
+            android:id="@+id/action_navigation_search_to_navigation_floor"
+            app:destination="@id/navigation_floor" />
+    </fragment>
 </navigation>

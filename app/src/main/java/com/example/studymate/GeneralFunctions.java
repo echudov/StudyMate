@@ -25,6 +25,8 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URL;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class GeneralFunctions {
     public static String getEmail(Activity context) {
@@ -37,8 +39,6 @@ public class GeneralFunctions {
             return "";
         }
     }
-
-
 
     public static Bitmap getProfilePic(Activity context) {
         FirebaseUser acct = FirebaseAuth.getInstance().getCurrentUser();
@@ -120,6 +120,15 @@ public class GeneralFunctions {
     }
 
     public static SearchResultData[] pullUsersFromDatabase() {
+        return null;
+    }
 
+    public static String capitalize(String capString){
+        StringBuffer capBuffer = new StringBuffer();
+        Matcher capMatcher = Pattern.compile("([a-z])([a-z]*)", Pattern.CASE_INSENSITIVE).matcher(capString);
+        while (capMatcher.find()){
+            capMatcher.appendReplacement(capBuffer, capMatcher.group(1).toUpperCase() + capMatcher.group(2).toLowerCase());
+        }
+        return capMatcher.appendTail(capBuffer).toString();
     }
 }

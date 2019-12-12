@@ -26,6 +26,22 @@ public class SearchResultData implements Parcelable {
         seatingLongitude = in.readDouble();
     }
 
+    public SearchResultData(String setStudyingContent,
+                            String setEmail,
+                            String setLibrary,
+                            int setSearchQueryNumber,
+                            int setFloor,
+                            double setSeatingLatitude,
+                            double setSeatingLongitude) {
+        this.studyingContent = setStudyingContent;
+        this.email = setEmail;
+        this.library = setLibrary;
+        this.searchQueryNumber = setSearchQueryNumber;
+        this.floor = setFloor;
+        this.seatingLatitude = setSeatingLatitude;
+        this.seatingLongitude = setSeatingLongitude;
+    }
+
     /**
      * Define the kind of object that you gonna parcel,
      * You can use hashCode() here

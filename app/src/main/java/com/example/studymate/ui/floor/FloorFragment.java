@@ -70,6 +70,7 @@ public class FloorFragment extends Fragment implements OnMapReadyCallback {
 
         if (getArguments() != null) {
             library = getArguments().getString("library");
+            floor = getArguments().getInt("floor");
         }
         mMapView = root.findViewById(R.id.mapView);
         mMapView.onCreate(savedInstanceState);
