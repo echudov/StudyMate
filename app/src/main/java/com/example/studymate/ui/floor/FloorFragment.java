@@ -1,6 +1,5 @@
 package com.example.studymate.ui.floor;
 
-import android.app.Dialog;
 import android.content.DialogInterface;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -13,11 +12,9 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
-import android.widget.SeekBar;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
-import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
 
@@ -30,8 +27,6 @@ import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.UiSettings;
-import com.google.android.gms.maps.model.BitmapDescriptor;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
@@ -40,13 +35,11 @@ import com.google.android.gms.maps.model.Tile;
 import com.google.android.gms.maps.model.TileOverlay;
 import com.google.android.gms.maps.model.TileOverlayOptions;
 import com.google.android.gms.maps.model.TileProvider;
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.GenericTypeIndicator;
 import com.google.firebase.database.ValueEventListener;
-import com.google.gson.JsonObject;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -69,6 +62,7 @@ public class FloorFragment extends Fragment implements OnMapReadyCallback {
     private Marker mostRecent = null;
 
     private HashMap<Integer, SearchResultData> users;
+    private List<Marker> markersOnMap;
 
     private String studying;
     private String library = "grainger";
@@ -100,7 +94,7 @@ public class FloorFragment extends Fragment implements OnMapReadyCallback {
         mMapView.getMapAsync(this::onMapReady);
         mapSynced = true;
 
-        floorSelector = root.findViewById(R.id.floorSelector);
+        RadioGroup floorSelector = root.findViewById(R.id.floorSelector);
         int id = getResources().getIdentifier("floorLevel" + floor, "id", getActivity().getPackageName());
         RadioButton selectedFloor = floorSelector.findViewById(id);
         selectedFloor.toggle();
@@ -109,21 +103,27 @@ public class FloorFragment extends Fragment implements OnMapReadyCallback {
             switch(checkedId) {
                 case R.id.floorLevel0:
                     floor = 0;
+                    addAllMarkers();
                     break;
                 case R.id.floorLevel1:
                     floor = 1;
+                    addAllMarkers();
                     break;
                 case R.id.floorLevel2:
                     floor = 2;
+                    addAllMarkers();
                     break;
                 case R.id.floorLevel3:
                     floor = 3;
+                    addAllMarkers();
                     break;
                 case R.id.floorLevel4:
                     floor = 4;
+                    addAllMarkers();
                     break;
                 default:
                     Log.v(TAG, "this isn't supposed to happen lol");
+                    addAllMarkers();
             }
             tileOverlay.remove();
             addTileOverlay(floor);
@@ -212,6 +212,34 @@ public class FloorFragment extends Fragment implements OnMapReadyCallback {
                 .snippet(contentStudying));
     }
 
+    /**
+     * This helper function will go through all users in the Map
+     * and add markers for each one that is in the current
+     * library and floor
+     */
+    private void addAllMarkers() {
+        // First clear all current markers from map & List
+        mMap.clear();
+        markersOnMap.clear();
+        // Go through all users
+        for(Map.Entry<Integer, SearchResultData> currentEntry : users.entrySet()) {
+            SearchResultData currentUser = currentEntry.getValue();
+            // Check if in correct library & correct floor
+            if (currentUser.getLibrary().equals("grainger") && currentUser.getFloor() == floor) {
+                // Add marker
+                MarkerOptions markerOptions = new MarkerOptions()
+                    .position(currentUser.getSeatingLatLng())
+                    .title(GeneralFunctions.getEmail(getActivity()))
+                    .snippet(currentUser.getStudyingContent());
+                mostRecent = mMap.addMarker(markerOptions);
+                // Add this marker to list
+                markersOnMap.add(mostRecent);
+            }
+        }
+    }
+
+
+
     private void addTileOverlay(int level) {
         // Logic for adding tile overlay
         TileProvider tileProvider = new TileProvider() {
@@ -254,5 +282,54 @@ public class FloorFragment extends Fragment implements OnMapReadyCallback {
 
         tileOverlay = mMap.addTileOverlay(new TileOverlayOptions()
                 .tileProvider(tileProvider));
+    }
+
+    private static void listenForUserChanges(Map<Integer, SearchResultData> users, String TAG) {
+        ValueEventListener postListener = new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                // Get Post object and use the values to update the UI
+                GenericTypeIndicator<List<SearchResultData>> genericTypeIndicator =new GenericTypeIndicator<List<SearchResultData>>(){};
+
+                List<SearchResultData> srd = dataSnapshot.getValue(genericTypeIndicator);
+                for (SearchResultData user : srd) {
+                    users.put(user.getSearchQueryNumber(), user);
+                }
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                // Getting Post failed, log a message
+                Log.w(TAG, "loadPost:onCancelled", databaseError.toException());
+                // ...
+            }
+        };
+        FirebaseDatabase currentDatabase = FirebaseDatabase.getInstance();
+        currentDatabase.getReference("users").addValueEventListener(postListener);
+    }
+
+    private static void initializeMap(Map<Integer, SearchResultData> users, String TAG) {
+        ValueEventListener postListener = new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                // Get Post object and use the values to update the UI
+                GenericTypeIndicator<List<SearchResultData>> genericTypeIndicator =new GenericTypeIndicator<List<SearchResultData>>(){};
+
+                List<SearchResultData> srd = dataSnapshot.getValue(genericTypeIndicator);
+                for (SearchResultData user : srd) {
+                    users.put(user.getSearchQueryNumber(), user);
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                // Getting Post failed, log a message
+                Log.w(TAG, "loadPost:onCancelled", databaseError.toException());
+                // ...
+            }
+        };
+        FirebaseDatabase currentDatabase = FirebaseDatabase.getInstance();
+        currentDatabase.getReference("users").addListenerForSingleValueEvent(postListener);
     }
 }

@@ -137,51 +137,5 @@ public class GeneralFunctions {
         return capMatcher.appendTail(capBuffer).toString();
     }
 
-    private static void listenForUserChanges(Map<Integer, SearchResultData> users, String TAG) {
-        ValueEventListener postListener = new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                // Get Post object and use the values to update the UI
-                GenericTypeIndicator<List<SearchResultData>> genericTypeIndicator =new GenericTypeIndicator<List<SearchResultData>>(){};
 
-                List<SearchResultData> srd = dataSnapshot.getValue(genericTypeIndicator);
-                for (SearchResultData user : srd) {
-                    users.put(user.getSearchQueryNumber(), user);
-                }
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                // Getting Post failed, log a message
-                Log.w(TAG, "loadPost:onCancelled", databaseError.toException());
-                // ...
-            }
-        };
-        FirebaseDatabase currentDatabase = FirebaseDatabase.getInstance();
-        currentDatabase.getReference("users").addValueEventListener(postListener);
-    }
-
-    private static void initializeMap(Map<Integer, SearchResultData> users, String TAG) {
-        ValueEventListener postListener = new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                // Get Post object and use the values to update the UI
-                GenericTypeIndicator<List<SearchResultData>> genericTypeIndicator =new GenericTypeIndicator<List<SearchResultData>>(){};
-
-                List<SearchResultData> srd = dataSnapshot.getValue(genericTypeIndicator);
-                for (SearchResultData user : srd) {
-                    users.put(user.getSearchQueryNumber(), user);
-                }
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                // Getting Post failed, log a message
-                Log.w(TAG, "loadPost:onCancelled", databaseError.toException());
-                // ...
-            }
-        };
-        FirebaseDatabase currentDatabase = FirebaseDatabase.getInstance();
-        currentDatabase.getReference("users").addListenerForSingleValueEvent(postListener);
-    }
 }

@@ -3,7 +3,6 @@ package com.example.studymate;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import com.firebase.ui.auth.data.model.User;
 import com.google.android.gms.maps.model.LatLng;
 
 public class SearchResultData implements Parcelable {
