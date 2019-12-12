@@ -14,8 +14,12 @@ import android.util.Log;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.GenericTypeIndicator;
+import com.google.firebase.database.ValueEventListener;
 import com.google.gson.JsonObject;
 import com.squareup.picasso.Picasso;
 
@@ -25,6 +29,8 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URL;
+import java.util.List;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -129,5 +135,53 @@ public class GeneralFunctions {
             capMatcher.appendReplacement(capBuffer, capMatcher.group(1).toUpperCase() + capMatcher.group(2).toLowerCase());
         }
         return capMatcher.appendTail(capBuffer).toString();
+    }
+
+    private static void listenForUserChanges(Map<Integer, SearchResultData> users, String TAG) {
+        ValueEventListener postListener = new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                // Get Post object and use the values to update the UI
+                GenericTypeIndicator<List<SearchResultData>> genericTypeIndicator =new GenericTypeIndicator<List<SearchResultData>>(){};
+
+                List<SearchResultData> srd = dataSnapshot.getValue(genericTypeIndicator);
+                for (SearchResultData user : srd) {
+                    users.put(user.getSearchQueryNumber(), user);
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                // Getting Post failed, log a message
+                Log.w(TAG, "loadPost:onCancelled", databaseError.toException());
+                // ...
+            }
+        };
+        FirebaseDatabase currentDatabase = FirebaseDatabase.getInstance();
+        currentDatabase.getReference("users").addValueEventListener(postListener);
+    }
+
+    private static void initializeMap(Map<Integer, SearchResultData> users, String TAG) {
+        ValueEventListener postListener = new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                // Get Post object and use the values to update the UI
+                GenericTypeIndicator<List<SearchResultData>> genericTypeIndicator =new GenericTypeIndicator<List<SearchResultData>>(){};
+
+                List<SearchResultData> srd = dataSnapshot.getValue(genericTypeIndicator);
+                for (SearchResultData user : srd) {
+                    users.put(user.getSearchQueryNumber(), user);
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                // Getting Post failed, log a message
+                Log.w(TAG, "loadPost:onCancelled", databaseError.toException());
+                // ...
+            }
+        };
+        FirebaseDatabase currentDatabase = FirebaseDatabase.getInstance();
+        currentDatabase.getReference("users").addListenerForSingleValueEvent(postListener);
     }
 }
