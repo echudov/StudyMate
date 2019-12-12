@@ -1,4 +1,4 @@
-package com.example.studymate.ui.notifications;
+package com.example.studymate.ui.search;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -6,7 +6,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.BaseExpandableListAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.SearchView;
@@ -45,7 +44,6 @@ public class SearchFragment extends Fragment {
         SearchResultData samplePerson = new SearchResultData("Calculus 2",
                                                             "testEmail@gmail.com",
                                                             "grainger",
-                                                            0,
                                                             1,
                                                             85, -45);
 

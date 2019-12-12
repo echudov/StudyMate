@@ -1,4 +1,4 @@
-package com.example.studymate.ui.notifications;
+package com.example.studymate.ui.search;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;

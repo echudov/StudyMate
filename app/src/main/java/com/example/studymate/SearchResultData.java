@@ -8,13 +8,14 @@ import com.google.android.gms.maps.model.LatLng;
 
 public class SearchResultData implements Parcelable {
 
-    private int searchQueryNumber;
+    private String studyingContent;
     private String email;
     private String library;
     private int floor;
+    private static int searchQueryNumber = 0;
     private double seatingLatitude;
     private double seatingLongitude;
-    private String studyingContent;
+
 
     public SearchResultData(Parcel in) {
         studyingContent = in.readString();
@@ -25,18 +26,18 @@ public class SearchResultData implements Parcelable {
         seatingLatitude = in.readDouble();
         seatingLongitude = in.readDouble();
     }
+    public SearchResultData() { }
 
     public SearchResultData(String setStudyingContent,
                             String setEmail,
                             String setLibrary,
-                            int setSearchQueryNumber,
                             int setFloor,
                             double setSeatingLatitude,
                             double setSeatingLongitude) {
         this.studyingContent = setStudyingContent;
         this.email = setEmail;
         this.library = setLibrary;
-        this.searchQueryNumber = setSearchQueryNumber;
+        searchQueryNumber++;
         this.floor = setFloor;
         this.seatingLatitude = setSeatingLatitude;
         this.seatingLongitude = setSeatingLongitude;

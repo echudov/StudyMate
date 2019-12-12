@@ -87,24 +87,23 @@ public class GeneralFunctions {
     /**
      * Saves any data type to a specified location in the current database.
      * @param reference The name of the location in the database
-     * @param value The data to save
+     * @param info The data to save
      */
-    public static void writeToDatabase(String reference, JsonObject value, String postRequest) {
+    public static void writeToDatabase(String reference, Object info, String postRequest) {
         FirebaseDatabase currentDatabase = FirebaseDatabase.getInstance();
         switch(postRequest) {
             case "sitDown":
-                // send shit w/ info about user sitting down
-                String email = value.getAsJsonPrimitive("Email").getAsString();
-                String path = "users" + email;
-
-                DatabaseReference referenceToWrite = currentDatabase.getReference(path);
-                referenceToWrite.setValue(email);
-
-                referenceToWrite = currentDatabase.getReference(path + "Latitude");
-                referenceToWrite.setValue(value.getAsJsonPrimitive("Latitude").getAsDouble());
-
-                referenceToWrite = currentDatabase.getReference(path + "Longitude");
-                referenceToWrite.setValue(value.getAsJsonPrimitive("Longitude").getAsDouble());
+                if (!(info instanceof SearchResultData)) {
+                    break;
+                }
+                SearchResultData toSend = (SearchResultData) info;
+                int userId = toSend.getSearchQueryNumber();
+                String userIdString = "" + userId;
+                currentDatabase.getReference().child("users")
+                        .child(userIdString).setValue(toSend);
+                break;
+            default:
+                break;
         }
 
     }

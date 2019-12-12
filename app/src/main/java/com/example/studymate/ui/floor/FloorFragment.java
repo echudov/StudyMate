@@ -22,6 +22,7 @@ import androidx.lifecycle.ViewModelProviders;
 
 import com.example.studymate.GeneralFunctions;
 import com.example.studymate.R;
+import com.example.studymate.SearchResultData;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
@@ -32,6 +33,7 @@ import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Tile;
 import com.google.android.gms.maps.model.TileOverlay;
@@ -55,6 +57,7 @@ public class FloorFragment extends Fragment implements OnMapReadyCallback {
     private GoogleMap mMap;
     private UiSettings mUiSettings;
     private TileOverlay tileOverlay;
+    private Marker mostRecent = null;
 
     private String studying;
     private String library = "grainger";
@@ -164,6 +167,14 @@ public class FloorFragment extends Fragment implements OnMapReadyCallback {
                     public void onClick(DialogInterface dialog, int which) {
                         studying = input.getText().toString();
                         addUserMarker(studying, latLng, googleMap);
+                        // Send information about new marker to FireBase Database
+                        SearchResultData toSend = new SearchResultData(mostRecent.getSnippet(),
+                                GeneralFunctions.getEmail(getActivity()),
+                                library,
+                                floor,
+                                mostRecent.getPosition().latitude,
+                                mostRecent.getPosition().longitude);
+                        GeneralFunctions.writeToDatabase("", toSend, "sitDown");
                     }
                 });
                 builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -175,7 +186,7 @@ public class FloorFragment extends Fragment implements OnMapReadyCallback {
 
                 builder.show();
 
-                // Send information about new marker to FireBase Database
+
 
                 /*
                 JsonObject data = new JsonObject();
@@ -197,7 +208,7 @@ public class FloorFragment extends Fragment implements OnMapReadyCallback {
     }
 
     private void addUserMarker(String contentStudying, LatLng location, GoogleMap googleMap) {
-        googleMap.addMarker(new MarkerOptions()
+        mostRecent = googleMap.addMarker(new MarkerOptions()
                 .position(location)
                 .title(GeneralFunctions.getEmail(getActivity()))
                 .snippet(contentStudying));
