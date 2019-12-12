@@ -213,8 +213,9 @@ public class FloorFragment extends Fragment implements OnMapReadyCallback {
      * library and floor
      */
     private void addAllMarkers() {
-        // First clear all current markers
+        // First clear all current markers from map & List
         mMap.clear();
+        markersOnMap.clear();
         // Go through all users
         for(Map.Entry<Integer, SearchResultData> currentEntry : users.entrySet()) {
             SearchResultData currentUser = currentEntry.getValue();
