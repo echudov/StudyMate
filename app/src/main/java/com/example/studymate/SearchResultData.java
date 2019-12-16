@@ -5,14 +5,30 @@ import android.os.Parcelable;
 
 import com.google.android.gms.maps.model.LatLng;
 
+
+/**
+ * Container class for info that the program needs about the users
+ * Might add the bitmap for the profile pic
+ * Parcelable is so that the data can be transferred between activities
+ * CURRENT IMPLEMENTATION IS NOT SECURE
+ * STORES DATA ON THE DEVICE
+ * IMPLEMENT CLOUD FUNCTIONS WITH FIREBASE
+ */
 public class SearchResultData implements Parcelable {
 
+    /** Content the user is studying */
     private String studyingContent;
+    /** User email */
     private String email;
+    /** Library the user is in */
     private String library;
+    /** Floor the user is on */
     private int floor;
+    /** Terrible name for the hashcode of user email */
     private int searchQueryNumber;
+    /** Latitude of seating location (not real latitude, for drawing purposes) */
     private double seatingLatitude;
+    /** Longitude of seating location (not real longitude, for drawing purposes) */
     private double seatingLongitude;
 
 
@@ -25,6 +41,10 @@ public class SearchResultData implements Parcelable {
         seatingLatitude = in.readDouble();
         seatingLongitude = in.readDouble();
     }
+
+    /**
+     * Empty constructor necessary for firebase
+     */
     public SearchResultData() { }
 
     public SearchResultData(String setStudyingContent,
@@ -80,6 +100,8 @@ public class SearchResultData implements Parcelable {
         }
     };
 
+
+    // getter functions
     public String getEmail() {
         return email;
     }

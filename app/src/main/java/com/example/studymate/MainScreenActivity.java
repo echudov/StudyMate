@@ -72,6 +72,9 @@ public class MainScreenActivity extends AppCompatActivity {
                         }
                     }
                 });
+        // location doesn't quite work
+        // next feature to add:
+        // if the user leaves/changes location to remove him from the database
 
         locationCallback = new LocationCallback() {
             public void onLocationResult(LocationResult locationResult) {
@@ -90,12 +93,23 @@ public class MainScreenActivity extends AppCompatActivity {
         locationRequest.setInterval(5);
     }
 
+    /**
+     * start getting location updates
+     * not fully functional
+     */
     private void startLocationUpdates() {
         fusedLocationClient.requestLocationUpdates(locationRequest,
                 locationCallback,
                 Looper.getMainLooper());
     }
-
+    /**
+     * Switch to floor function
+     * Called by child fragments to switch to the floor view
+     * Extra information passed thru bundles
+     * @param library library to switch to
+     * @param floor floor to look at
+     * @param fragment fragment switching from
+     */
     public void switchToFloor(String library, int floor, String fragment) {
         Bundle bundle = new Bundle();
         bundle.putString("library", library);

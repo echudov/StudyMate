@@ -22,6 +22,11 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class GeneralFunctions {
+    /**
+     * gets user email from firebase
+     * @param context current context
+     * @return email string
+     */
     public static String getEmail(Activity context) {
         FirebaseUser acct = FirebaseAuth.getInstance().getCurrentUser();
         try {
@@ -33,6 +38,12 @@ public class GeneralFunctions {
         }
     }
 
+    /**
+     * gets profile pic from current user
+     * not functional at the moment haha
+     * @param context current context
+     * @return bitmap of the profile pic
+     */
     public static Bitmap getProfilePic(Activity context) {
         FirebaseUser acct = FirebaseAuth.getInstance().getCurrentUser();
         Uri uri = acct.getPhotoUrl();
@@ -41,6 +52,13 @@ public class GeneralFunctions {
         return getBitmapFromURL(uri.toString());
     }
 
+    /**
+     * gets bitmap from passed url
+     * currently doesn't work
+     * need to fix, but not essential for presentation
+     * @param str url
+     * @return bitmap from that URL
+     */
     protected static Bitmap getBitmapFromURL(String str) {
         try {
             java.net.URL url = new java.net.URL(str);
@@ -111,10 +129,11 @@ public class GeneralFunctions {
         referenceToClear.removeValue();
     }
 
-    public static SearchResultData[] pullUsersFromDatabase() {
-        return null;
-    }
-
+    /**
+     * Capitalies first letter of words in a string
+     * @param capString string to capitalize
+     * @return capitalized string
+     */
     public static String capitalize(String capString){
         StringBuffer capBuffer = new StringBuffer();
         Matcher capMatcher = Pattern.compile("([a-z])([a-z]*)", Pattern.CASE_INSENSITIVE).matcher(capString);
